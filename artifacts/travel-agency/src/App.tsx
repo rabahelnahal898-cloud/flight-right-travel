@@ -1945,8 +1945,7 @@ const destinations: Destination[] = [
     country: "Türkiye",
     tag: "Historic lanes, Bosphorus light",
     price: "€129",
-    image:
-      "https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg?auto=compress&cs=tinysrgb&w=1100",
+    image: "/alpcem-istanbul-4785964_1920.jpg",
     accent: "city breaks & culture",
   },
   {
@@ -1955,8 +1954,7 @@ const destinations: Destination[] = [
     country: "Egypt",
     tag: "Old stones, river evenings",
     price: "€245",
-    image:
-      "https://images.pexels.com/photos/3225531/pexels-photo-3225531.jpeg?auto=compress&cs=tinysrgb&w=1100",
+    image: "/8moments-pyramids-3753769_1920.jpg",
     accent: "nile evenings & old stones",
   },
   {
@@ -1965,8 +1963,7 @@ const destinations: Destination[] = [
     country: "Egypt",
     tag: "Sea air, reef days",
     price: "€289",
-    image:
-      "https://images.pexels.com/photos/533322/pexels-photo-533322.jpeg?auto=compress&cs=tinysrgb&w=1100",
+    image: "/nabil007-elgouna-3017212_1920.jpg",
     accent: "sun, reef & slow rhythms",
   },
   {
@@ -1975,8 +1972,7 @@ const destinations: Destination[] = [
     country: "Egypt",
     tag: "Red Sea calm",
     price: "€219",
-    image:
-      "https://images.pexels.com/photos/1001682/pexels-photo-1001682.jpeg?auto=compress&cs=tinysrgb&w=1100",
+    image: "/sunriseforever-resort-8344460_1920.jpg",
     accent: "reef escapes & sunsets",
   },
   {
@@ -1985,8 +1981,7 @@ const destinations: Destination[] = [
     country: "Türkiye",
     tag: "Sunrise magic",
     price: "€179",
-    image:
-      "https://images.pexels.com/photos/585402/pexels-photo-585402.jpeg?auto=compress&cs=tinysrgb&w=1100",
+    image: "/timrael-hot-air-balloons-4561267_1920.jpg",
     accent: "balloons & volcanic landscapes",
   },
   {
@@ -1995,8 +1990,7 @@ const destinations: Destination[] = [
     country: "Türkiye",
     tag: "Coasts, gardens and drift",
     price: "€189",
-    image:
-      "https://images.pexels.com/photos/1139541/pexels-photo-1139541.jpeg?auto=compress&cs=tinysrgb&w=1100",
+    image: "/10444241-alanya-3758816_1920.jpg",
     accent: "beaches, bay views & easy escapes",
   },
   {
@@ -2005,8 +1999,7 @@ const destinations: Destination[] = [
     country: "United Arab Emirates",
     tag: "Skyline and desert light",
     price: "€315",
-    image:
-      "https://images.pexels.com/photos/1470502/pexels-photo-1470502.jpeg?auto=compress&cs=tinysrgb&w=1100",
+    image: "/jeshoots-com-burj-khalifa-2212978_1920.jpg",
     accent: "modern stays & desert days",
   },
   {
@@ -2015,8 +2008,7 @@ const destinations: Destination[] = [
     country: "Jordan",
     tag: "City edges and mountain air",
     price: "€199",
-    image:
-      "https://images.pexels.com/photos/1858175/pexels-photo-1858175.jpeg?auto=compress&cs=tinysrgb&w=1100",
+    image: "/jonny_joka-amman-7130516_1920.jpg",
     accent: "ancient routes & warm hospitality",
   },
   {
@@ -2025,8 +2017,7 @@ const destinations: Destination[] = [
     country: "Lebanon",
     tag: "Seaside evenings and culture",
     price: "€229",
-    image:
-      "https://images.pexels.com/photos/1323550/pexels-photo-1323550.jpeg?auto=compress&cs=tinysrgb&w=1100",
+    image: "/instagramfotografin-lebanon-4037674_1920.jpg",
     accent: "coast, cafés & city rhythm",
   },
   {
@@ -2035,8 +2026,7 @@ const destinations: Destination[] = [
     country: "Netherlands",
     tag: "Canals, bikes and easy energy",
     price: "€245",
-    image:
-      "https://images.pexels.com/photos/2193300/pexels-photo-2193300.jpeg?auto=compress&cs=tinysrgb&w=1100",
+    image: "/iulian_ursache-canal-5488271_1920.jpg",
     accent: "city breaks & design-led routes",
   },
 ];
@@ -2058,8 +2048,7 @@ const destinationDetails: Record<
   istanbul: {
     city: "Istanbul",
     country: "Türkiye",
-    image:
-      "https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg?auto=compress&cs=tinysrgb&w=1100",
+    image: "/alpcem-istanbul-4785964_1920.jpg",
     overview:
       "Istanbul brings together historic streets, Bosphorus views and a lively city rhythm that works beautifully for short escapes or longer stays. Flight Right can shape the trip around the way you want to travel, from a compact city break to a slower cultural stay.",
     whyVisit: [
@@ -2102,8 +2091,7 @@ const destinationDetails: Record<
   cairo: {
     city: "Cairo",
     country: "Egypt",
-    image:
-      "https://images.pexels.com/photos/3225531/pexels-photo-3225531.jpeg?auto=compress&cs=tinysrgb&w=1100",
+    image: "/8moments-pyramids-3753769_1920.jpg",
     overview:
       "Cairo blends heritage, river evenings and easy access to Egypt’s most iconic sights, making it a strong destination for city breaks and cultural itineraries.",
     whyVisit: [
