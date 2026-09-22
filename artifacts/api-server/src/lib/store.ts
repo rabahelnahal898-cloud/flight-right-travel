@@ -5,6 +5,9 @@ export type BookingRecord = BookingInput & {
   id: string;
   createdAt: string;
   status: "request_received" | "confirmed" | "failed";
+  duffelOrderId?: string;
+  bookingReference?: string;
+  paymentStatus?: string;
 };
 
 const bookings = new Map<string, BookingRecord>();
@@ -13,12 +16,18 @@ const subscribers = new Set<string>();
 const serviceRequests: Array<ServiceRequestInput & { id: string; createdAt: string; status: "received" }> = [];
 const partnerApplications: Array<PartnerApplicationInput & { id: string; createdAt: string; status: "received" }> = [];
 
-export function createBooking(input: BookingInput): BookingRecord {
+export function createBooking(
+  input: BookingInput,
+  duffelData?: { orderId: string; bookingReference: string; paymentStatus: string }
+): BookingRecord {
   const record: BookingRecord = {
     ...input,
     id: `FR-${randomUUID().slice(0, 8).toUpperCase()}`,
     createdAt: new Date().toISOString(),
-    status: "request_received",
+    status: duffelData ? "confirmed" : "request_received",
+    duffelOrderId: duffelData?.orderId,
+    bookingReference: duffelData?.bookingReference,
+    paymentStatus: duffelData?.paymentStatus,
   };
   bookings.set(record.id, record);
   return record;

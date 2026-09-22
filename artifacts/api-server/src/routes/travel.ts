@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { Router, type IRouter } from "express";
 import { BookingRequest, ContactRequest, FlightSearchRequest, NewsletterRequest, PartnerApplication, ServiceRequest, TripLookupRequest } from "@workspace/api-zod";
 import { config } from "../lib/config";
-import { getDuffelOfferData, searchDuffelFlights } from "../lib/duffel";
+import { getDuffelOfferData, searchDuffelFlights, createDuffelOrder } from "../lib/duffel";
 import { createBooking, createPartnerApplication, createServiceRequest, findBookings, saveContact, subscribe } from "../lib/store";
 import { notifyTeam } from "../lib/notifications";
 
@@ -26,17 +26,81 @@ router.get("/flights/offers/:offerId", async (req, res, next) => {
   } catch (error) { next(error); }
 });
 
-router.post("/bookings", (req, res, next) => {
+router.post("/bookings", async (req, res, next) => {
   try {
     const input = BookingRequest.parse(req.body);
-    const booking = createBooking(input);
-    void notifyTeam({
-      subject: `New flight booking request ${booking.id}`,
-      text: `${input.firstName} ${input.lastName} requested ${input.search.from} to ${input.search.to} on ${input.search.departDate}.\nEmail: ${input.email}\nPhone: ${input.phone}\nOffer: ${input.offerId}`,
-      replyTo: input.email,
-    });
-    return res.status(201).json({ id: booking.id, status: booking.status, provider: config.duffelEnabled ? "duffel" : "demo", message: "Booking request received. Live order creation is ready to be enabled." });
-  } catch (error) { next(error); }
+    
+    let booking;
+    
+    if (config.duffelEnabled) {
+      try {
+        // Create real Duffel order
+        const order = await createDuffelOrder(input.offerId, input);
+        
+        // Store booking with Duffel order data
+        booking = createBooking(input, {
+          orderId: order.orderId,
+          bookingReference: order.bookingReference,
+          paymentStatus: order.paymentStatus,
+        });
+        
+        void notifyTeam({
+          subject: `Flight booking confirmed ${booking.id}`,
+          text: `${input.firstName} ${input.lastName} booked ${input.search.from} to ${input.search.to} on ${input.search.departDate}.\nBooking Reference: ${order.bookingReference}\nDuffel Order ID: ${order.orderId}\nPayment Status: ${order.paymentStatus}\nEmail: ${input.email}\nPhone: ${input.phone}`,
+          replyTo: input.email,
+        });
+        
+        return res.status(201).json({
+          id: booking.id,
+          status: booking.status,
+          bookingReference: order.bookingReference,
+          duffelOrderId: order.orderId,
+          paymentStatus: order.paymentStatus,
+          provider: "duffel",
+          message: "Flight booked successfully",
+        });
+      } catch (duffelError) {
+        // Handle Duffel API errors
+        console.error("Duffel order creation failed:", duffelError);
+        
+        // Create booking with failed status
+        booking = createBooking(input);
+        booking.status = "failed";
+        
+        void notifyTeam({
+          subject: `Flight booking failed ${booking.id}`,
+          text: `${input.firstName} ${input.lastName} attempted booking ${input.search.from} to ${input.search.to}.\nError: ${duffelError instanceof Error ? duffelError.message : "Unknown error"}\nEmail: ${input.email}\nPhone: ${input.phone}\nOffer: ${input.offerId}`,
+          replyTo: input.email,
+        });
+        
+        return res.status(400).json({
+          id: booking.id,
+          status: "failed",
+          provider: "duffel",
+          error: duffelError instanceof Error ? duffelError.message : "Order creation failed",
+          message: "Booking failed. Please try again or contact support.",
+        });
+      }
+    } else {
+      // Demo mode: create booking request without real order
+      booking = createBooking(input);
+      
+      void notifyTeam({
+        subject: `New flight booking request ${booking.id}`,
+        text: `${input.firstName} ${input.lastName} requested ${input.search.from} to ${input.search.to} on ${input.search.departDate}.\nEmail: ${input.email}\nPhone: ${input.phone}\nOffer: ${input.offerId}`,
+        replyTo: input.email,
+      });
+      
+      return res.status(201).json({
+        id: booking.id,
+        status: booking.status,
+        provider: "demo",
+        message: "Booking request received. Live order creation is ready to be enabled.",
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.post("/contact", (req, res, next) => {

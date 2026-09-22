@@ -1,5 +1,6 @@
-import type { FlightOfferData, FlightSearchInput } from "@workspace/api-zod";
+import type { FlightOfferData, FlightSearchInput, BookingInput } from "@workspace/api-zod";
 import { config } from "./config";
+import { Duffel } from "@duffel/api";
 
 type DuffelOffer = {
   id: string;
@@ -63,4 +64,49 @@ export async function getDuffelOffer(offerId: string) {
 export async function getDuffelOfferData(offerId: string, cabin: string) {
   const offer = await getDuffelOffer(offerId);
   return offer ? formatOffer(offer, cabin) : null;
+}
+
+export async function createDuffelOrder(offerId: string, bookingInput: BookingInput) {
+  if (!config.duffelToken) {
+    throw new Error("Duffel API token not configured");
+  }
+
+  const duffel = new Duffel({ token: config.duffelToken });
+
+  // Transform BookingInput passengers to Duffel format
+  const passengers = bookingInput.passengers.map((p) => ({
+    given_name: p.firstName,
+    family_name: p.lastName,
+    born_on: p.dateOfBirth,
+    gender: p.gender.toLowerCase() as "m" | "f",
+    title: p.title.toLowerCase() as "mr" | "ms" | "mrs" | "miss" | "dr",
+    phone_number: p.phone,
+    email: p.email,
+  }));
+
+  // Create order with instant payment type (using balance)
+  const orderRequest = {
+    selected_offers: [offerId],
+    passengers,
+    type: "instant" as const,
+    payments: [
+      {
+        type: "balance" as const,
+        amount: bookingInput.amount,
+        currency: bookingInput.currency,
+      },
+    ],
+  };
+
+  const order = await duffel.orders.create(orderRequest);
+
+  return {
+    orderId: order.data.id,
+    bookingReference: order.data.booking_reference,
+    totalAmount: order.data.total_amount,
+    totalCurrency: order.data.total_currency,
+    paymentStatus: order.data.payment_status.status,
+    passengers: order.data.passengers,
+    slices: order.data.slices,
+  };
 }
