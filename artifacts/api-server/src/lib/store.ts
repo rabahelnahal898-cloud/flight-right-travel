@@ -1,5 +1,8 @@
-import { randomUUID } from "node:crypto";
+import { PrismaClient } from "@prisma/client";
 import type { BookingInput, PartnerApplicationInput, ServiceRequestInput } from "@workspace/api-zod";
+
+// Initialize Prisma Client
+const prisma = new PrismaClient();
 
 export type BookingRecord = BookingInput & {
   id: string;
@@ -10,55 +13,163 @@ export type BookingRecord = BookingInput & {
   paymentStatus?: string;
 };
 
-const bookings = new Map<string, BookingRecord>();
-const contacts: Array<Record<string, string>> = [];
-const subscribers = new Set<string>();
-const serviceRequests: Array<ServiceRequestInput & { id: string; createdAt: string; status: "received" }> = [];
-const partnerApplications: Array<PartnerApplicationInput & { id: string; createdAt: string; status: "received" }> = [];
-
-export function createBooking(
+export async function createBooking(
   input: BookingInput,
   duffelData?: { orderId: string; bookingReference: string; paymentStatus: string }
-): BookingRecord {
-  const record: BookingRecord = {
+): Promise<BookingRecord> {
+  const booking = await prisma.booking.create({
+    data: {
+      offerId: input.offerId,
+      amount: input.amount,
+      currency: input.currency,
+      firstName: input.firstName,
+      lastName: input.lastName,
+      email: input.email,
+      phone: input.phone,
+      dateOfBirth: input.dateOfBirth,
+      gender: input.gender,
+      title: input.title,
+      passengers: input.passengers || [],
+      search: input.search,
+      status: duffelData ? "confirmed" : "request_received",
+      duffelOrderId: duffelData?.orderId,
+      bookingReference: duffelData?.bookingReference,
+      paymentStatus: duffelData?.paymentStatus,
+    },
+  });
+
+  return {
     ...input,
-    id: `FR-${randomUUID().slice(0, 8).toUpperCase()}`,
-    createdAt: new Date().toISOString(),
-    status: duffelData ? "confirmed" : "request_received",
-    duffelOrderId: duffelData?.orderId,
-    bookingReference: duffelData?.bookingReference,
-    paymentStatus: duffelData?.paymentStatus,
+    id: booking.id,
+    createdAt: booking.createdAt.toISOString(),
+    status: booking.status as "request_received" | "confirmed" | "failed",
+    duffelOrderId: booking.duffelOrderId || undefined,
+    bookingReference: booking.bookingReference || undefined,
+    paymentStatus: booking.paymentStatus || undefined,
   };
-  bookings.set(record.id, record);
-  return record;
 }
 
-export function findBookings(reference: string, email: string) {
-  return [...bookings.values()].filter(
-    (booking) => booking.id.toLowerCase() === reference.toLowerCase() && booking.email.toLowerCase() === email.toLowerCase(),
-  );
+export async function findBookings(reference: string, email: string) {
+  const bookings = await prisma.booking.findMany({
+    where: {
+      OR: [
+        { id: { equals: reference, mode: "insensitive" } },
+        { bookingReference: { equals: reference, mode: "insensitive" } },
+      ],
+      email: { equals: email, mode: "insensitive" },
+    },
+  });
+
+  return bookings.map((booking) => ({
+    id: booking.id,
+    createdAt: booking.createdAt.toISOString(),
+    status: booking.status as "request_received" | "confirmed" | "failed",
+    offerId: booking.offerId,
+    amount: booking.amount,
+    currency: booking.currency,
+    firstName: booking.firstName,
+    lastName: booking.lastName,
+    email: booking.email,
+    phone: booking.phone,
+    dateOfBirth: booking.dateOfBirth,
+    gender: booking.gender,
+    title: booking.title,
+    passengers: booking.passengers as any,
+    search: booking.search as any,
+    duffelOrderId: booking.duffelOrderId || undefined,
+    bookingReference: booking.bookingReference || undefined,
+    paymentStatus: booking.paymentStatus || undefined,
+  }));
 }
 
-export function saveContact(input: Record<string, string>) {
-  contacts.push({ ...input, createdAt: new Date().toISOString() });
+export async function saveContact(input: Record<string, string>) {
+  await prisma.contact.create({
+    data: {
+      name: input.name || "",
+      email: input.email || "",
+      subject: input.subject || "",
+      message: input.message || "",
+    },
+  });
 }
 
-export function subscribe(email: string) {
-  subscribers.add(email.toLowerCase());
+export async function subscribe(email: string) {
+  await prisma.subscriber.upsert({
+    where: { email: email.toLowerCase() },
+    update: {},
+    create: { email: email.toLowerCase() },
+  });
 }
 
-export function getBooking(id: string) {
-  return bookings.get(id);
+export async function getBooking(id: string) {
+  const booking = await prisma.booking.findUnique({
+    where: { id },
+  });
+
+  if (!booking) return null;
+
+  return {
+    id: booking.id,
+    createdAt: booking.createdAt.toISOString(),
+    status: booking.status as "request_received" | "confirmed" | "failed",
+    offerId: booking.offerId,
+    amount: booking.amount,
+    currency: booking.currency,
+    firstName: booking.firstName,
+    lastName: booking.lastName,
+    email: booking.email,
+    phone: booking.phone,
+    dateOfBirth: booking.dateOfBirth,
+    gender: booking.gender,
+    title: booking.title,
+    passengers: booking.passengers as any,
+    search: booking.search as any,
+    duffelOrderId: booking.duffelOrderId || undefined,
+    bookingReference: booking.bookingReference || undefined,
+    paymentStatus: booking.paymentStatus || undefined,
+  };
 }
 
-export function createServiceRequest(input: ServiceRequestInput) {
-  const record = { ...input, id: `SR-${randomUUID().slice(0, 8).toUpperCase()}`, createdAt: new Date().toISOString(), status: "received" as const };
-  serviceRequests.push(record);
-  return record;
+export async function createServiceRequest(input: ServiceRequestInput) {
+  const request = await prisma.serviceRequest.create({
+    data: {
+      name: input.name,
+      email: input.email,
+      phone: input.phone,
+      service: input.service,
+      item: input.item,
+      details: input.details,
+      status: "received",
+    },
+  });
+
+  return {
+    ...input,
+    id: request.id,
+    createdAt: request.createdAt.toISOString(),
+    status: "received" as const,
+  };
 }
 
-export function createPartnerApplication(input: PartnerApplicationInput) {
-  const record = { ...input, id: `PA-${randomUUID().slice(0, 8).toUpperCase()}`, createdAt: new Date().toISOString(), status: "received" as const };
-  partnerApplications.push(record);
-  return record;
+export async function createPartnerApplication(input: PartnerApplicationInput) {
+  const application = await prisma.partnerApplication.create({
+    data: {
+      business: input.business,
+      email: input.email,
+      type: input.type,
+      location: input.location,
+      details: input.details,
+      status: "received",
+    },
+  });
+
+  return {
+    ...input,
+    id: application.id,
+    createdAt: application.createdAt.toISOString(),
+    status: "received" as const,
+  };
 }
+
+// Export prisma instance for direct use if needed
+export { prisma };

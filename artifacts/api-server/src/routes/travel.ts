@@ -38,7 +38,7 @@ router.post("/bookings", async (req, res, next) => {
         const order = await createDuffelOrder(input.offerId, input);
         
         // Store booking with Duffel order data
-        booking = createBooking(input, {
+        booking = await createBooking(input, {
           orderId: order.orderId,
           bookingReference: order.bookingReference,
           paymentStatus: order.paymentStatus,
@@ -64,8 +64,7 @@ router.post("/bookings", async (req, res, next) => {
         console.error("Duffel order creation failed:", duffelError);
         
         // Create booking with failed status
-        booking = createBooking(input);
-        booking.status = "failed";
+        booking = await createBooking(input);
         
         void notifyTeam({
           subject: `Flight booking failed ${booking.id}`,
@@ -83,7 +82,7 @@ router.post("/bookings", async (req, res, next) => {
       }
     } else {
       // Demo mode: create booking request without real order
-      booking = createBooking(input);
+      booking = await createBooking(input);
       
       void notifyTeam({
         subject: `New flight booking request ${booking.id}`,
@@ -103,36 +102,36 @@ router.post("/bookings", async (req, res, next) => {
   }
 });
 
-router.post("/contact", (req, res, next) => {
+router.post("/contact", async (req, res, next) => {
   try {
     const input = ContactRequest.parse(req.body);
-    saveContact(input);
+    await saveContact(input);
     void notifyTeam({ subject: `Website contact: ${input.subject}`, text: `${input.name} (${input.email}) wrote:\n\n${input.message}`, replyTo: input.email });
     return res.status(201).json({ status: "received" });
   } catch (error) { next(error); }
 });
 
-router.post("/newsletter/subscribe", (req, res, next) => {
-  try { const input = NewsletterRequest.parse(req.body); subscribe(input.email); return res.status(201).json({ status: "subscribed" }); } catch (error) { next(error); }
+router.post("/newsletter/subscribe", async (req, res, next) => {
+  try { const input = NewsletterRequest.parse(req.body); await subscribe(input.email); return res.status(201).json({ status: "subscribed" }); } catch (error) { next(error); }
 });
 
-router.post("/trips/lookup", (req, res, next) => {
-  try { const input = TripLookupRequest.parse(req.body); return res.json({ trips: findBookings(input.reference, input.email) }); } catch (error) { next(error); }
+router.post("/trips/lookup", async (req, res, next) => {
+  try { const input = TripLookupRequest.parse(req.body); return res.json({ trips: await findBookings(input.reference, input.email) }); } catch (error) { next(error); }
 });
 
-router.post("/service-requests", (req, res, next) => {
+router.post("/service-requests", async (req, res, next) => {
   try {
     const input = ServiceRequest.parse(req.body);
-    const request = createServiceRequest(input);
+    const request = await createServiceRequest(input);
     void notifyTeam({ subject: `New service request ${request.id}: ${input.item}`, text: `${input.name} requested ${input.item} (${input.service}).\nEmail: ${input.email}\nPhone: ${input.phone}\nDetails: ${input.details}`, replyTo: input.email });
     return res.status(201).json({ id: request.id, status: request.status });
   } catch (error) { next(error); }
 });
 
-router.post("/partner-applications", (req, res, next) => {
+router.post("/partner-applications", async (req, res, next) => {
   try {
     const input = PartnerApplication.parse(req.body);
-    const application = createPartnerApplication(input);
+    const application = await createPartnerApplication(input);
     void notifyTeam({ subject: `New partner application ${application.id}: ${input.business}`, text: `${input.business} (${input.type}) in ${input.location}.\nEmail: ${input.email}\nDetails: ${input.details}`, replyTo: input.email });
     return res.status(201).json({ id: application.id, status: application.status });
   } catch (error) { next(error); }

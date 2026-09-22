@@ -1,0 +1,100 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Booking {
+  id                String   @id @default(cuid())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  status            String   @default("request_received") // request_received, confirmed, failed
+  
+  // Booking details
+  offerId           String
+  amount            String
+  currency          String
+  
+  // Passenger information
+  firstName         String
+  lastName          String
+  email             String
+  phone             String
+  dateOfBirth       String
+  gender            String
+  title             String
+  
+  // Additional passengers (JSON array)
+  passengers        Json?
+  
+  // Search information (JSON)
+  search            Json
+  
+  // Duffel order details (optional)
+  duffelOrderId     String?
+  bookingReference  String?
+  paymentStatus     String?
+  
+  @@index([email])
+  @@index([bookingReference])
+  @@index([createdAt])
+}
+
+model Contact {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  
+  name      String
+  email     String
+  subject   String
+  message   String
+  
+  @@index([email])
+  @@index([createdAt])
+}
+
+model Subscriber {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  
+  email     String   @unique
+  
+  @@index([email])
+}
+
+model ServiceRequest {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  status    String   @default("received")
+  
+  name      String
+  email     String
+  phone     String
+  service   String
+  item      String
+  details   String?
+  
+  @@index([email])
+  @@index([createdAt])
+}
+
+model PartnerApplication {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  status    String   @default("received")
+  
+  business  String
+  email     String
+  type      String
+  location  String
+  details   String?
+  
+  @@index([email])
+  @@index([createdAt])
+}
