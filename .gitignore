@@ -1,0 +1,12 @@
+node_modules/
+**/node_modules/
+.git-corrupt-backup/
+dist/
+**/dist/
+.env
+.env.*
+!.env.example
+*.tsbuildinfo
+.vite/
+coverage/
+*.log

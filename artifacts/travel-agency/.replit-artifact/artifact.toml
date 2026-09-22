@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Wanderwell Travel"
+description = "A responsive online travel agency website for discovering destinations, searching stays and flights, and planning memorable trips with a curated, editorial experience."
+version = "1.0.0"
+id = "artifacts/travel-agency"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19981
+
+[services.development]
+run = "pnpm --filter @workspace/travel-agency run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/travel-agency", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/travel-agency/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19981"
+BASE_PATH = "/"

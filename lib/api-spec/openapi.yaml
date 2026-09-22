@@ -1,0 +1,217 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: flights
+    description: Flight search and offer operations
+  - name: bookings
+    description: Booking request operations
+  - name: support
+    description: Contact, newsletter, and trip lookup operations
+  - name: payments
+    description: Stripe Checkout and webhook operations
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /flights/search:
+    post:
+      operationId: searchFlights
+      tags: [flights]
+      summary: Search flight offers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FlightSearchRequest"
+      responses:
+        "200":
+          description: Flight search results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FlightSearchResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+  /flights/offers/{offerId}:
+    get:
+      operationId: getFlightOffer
+      tags: [flights]
+      summary: Retrieve a live Duffel offer
+      parameters:
+        - name: offerId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Flight offer
+        "404": { description: Offer not found }
+        "503": { description: Duffel is not configured }
+  /bookings:
+    post:
+      operationId: createBookingRequest
+      tags: [bookings]
+      summary: Create a booking request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookingRequest"
+      responses:
+        "201": { description: Booking request created }
+        "400": { $ref: "#/components/responses/ValidationError" }
+  /contact:
+    post:
+      operationId: createContactRequest
+      tags: [support]
+      summary: Send a contact request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ContactRequest" }
+      responses:
+        "201": { description: Contact request received }
+  /newsletter/subscribe:
+    post:
+      operationId: subscribeNewsletter
+      tags: [support]
+      summary: Subscribe an email address
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/NewsletterRequest" }
+      responses:
+        "201": { description: Subscription received }
+  /trips/lookup:
+    post:
+      operationId: lookupTrip
+      tags: [support]
+      summary: Look up a booking request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/TripLookupRequest" }
+      responses:
+        "200": { description: Matching trips }
+  /payments/checkout:
+    post:
+      operationId: createStripeCheckout
+      tags: [payments]
+      summary: Create a Stripe Checkout session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/PaymentCheckoutRequest" }
+      responses:
+        "201": { description: Stripe Checkout session created }
+        "404": { description: Booking request not found }
+        "503": { description: Stripe is not configured }
+  /payments/webhook:
+    post:
+      operationId: stripeWebhook
+      tags: [payments]
+      summary: Receive Stripe payment events
+      responses:
+        "200": { description: Webhook accepted }
+        "400": { description: Invalid webhook signature }
+        "503": { description: Stripe webhook is not configured }
+components:
+  responses:
+    ValidationError:
+      description: Request validation failed
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [error, code]
+            properties:
+              error: { type: string }
+              code: { type: string }
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+    FlightSearchRequest:
+      type: object
+      required: [from, to, departDate, passengers, cabin]
+      properties:
+        from: { type: string }
+        to: { type: string }
+        departDate: { type: string, format: date }
+        returnDate: { type: string, format: date }
+        passengers: { type: integer, minimum: 1, maximum: 9 }
+        cabin: { type: string, enum: [Economy, Premium Economy, Business, First] }
+    FlightSearchResponse:
+      type: object
+      required: [searchId, source, search, offers]
+      properties:
+        searchId: { type: string }
+        source: { type: string, enum: [duffel, demo] }
+        search: { $ref: "#/components/schemas/FlightSearchRequest" }
+        offers: { type: array, items: { type: object } }
+    BookingRequest:
+      type: object
+      required: [offerId, firstName, lastName, email, phone, search]
+      properties:
+        offerId: { type: string }
+        firstName: { type: string }
+        lastName: { type: string }
+        email: { type: string, format: email }
+        phone: { type: string }
+        search: { $ref: "#/components/schemas/FlightSearchRequest" }
+    ContactRequest:
+      type: object
+      required: [name, email, subject, message]
+      properties:
+        name: { type: string }
+        email: { type: string, format: email }
+        subject: { type: string }
+        message: { type: string }
+    NewsletterRequest:
+      type: object
+      required: [email]
+      properties:
+        email: { type: string, format: email }
+    TripLookupRequest:
+      type: object
+      required: [reference, email]
+      properties:
+        reference: { type: string }
+        email: { type: string, format: email }
+    PaymentCheckoutRequest:
+      type: object
+      required: [bookingId, successUrl, cancelUrl]
+      properties:
+        bookingId: { type: string }
+        successUrl: { type: string, format: uri }
+        cancelUrl: { type: string, format: uri }
+

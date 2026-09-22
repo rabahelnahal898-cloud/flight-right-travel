@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 320" role="img" aria-labelledby="title desc">
+  <title id="title">Flight Right</title>
+  <desc id="desc">Flight Right travel logo with an FR monogram, gold travel motifs, and the tagline Your Journey, Our Priority</desc>
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f4d37a"/>
+      <stop offset=".52" stop-color="#bd7620"/>
+      <stop offset="1" stop-color="#7a4317"/>
+    </linearGradient>
+    <linearGradient id="goldLight" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff0b0"/>
+      <stop offset="1" stop-color="#c78528"/>
+    </linearGradient>
+    <linearGradient id="navy" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1c385d"/>
+      <stop offset="1" stop-color="#071c3c"/>
+    </linearGradient>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#071c3c" flood-opacity=".16"/>
+    </filter>
+  </defs>
+
+  <!-- Air, mountain, and flower emblem -->
+  <g stroke="#071c3c" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M247 91 268 38 289 91Z" fill="url(#gold)" stroke-width="3"/>
+    <path d="M268 38v53" fill="none" stroke="#f8e4a0" stroke-width="5"/>
+    <path d="m268 41 14 32-14-7Z" fill="#071c3c" stroke="none"/>
+    <path d="M268 91c-14 12-28 15-43 8 8-16 23-22 43-15Z" fill="url(#goldLight)" stroke-width="3"/>
+    <path d="M268 91c14-13 28-15 43-7-9 17-24 21-43 14Z" fill="#183b63" stroke-width="3"/>
+
+    <path d="M229 73c-28-16-48-13-64 5 20 20 41 18 65 3Z" fill="#fff" stroke-width="3"/>
+    <path d="M229 74c-19 7-31 15-39 27" fill="none" stroke="#071c3c" stroke-width="3"/>
+
+    <path d="M271 30c-13-12-11-26 2-37 18 9 21 24 8 38Z" fill="url(#gold)" stroke-width="3"/>
+    <path d="M278 31c3-17 14-27 29-29 2 17-8 29-27 35Z" fill="#8a4d1b" stroke-width="3"/>
+    <path d="M274 31c-4-16-1-29 12-39 13 12 13 26 1 40Z" fill="#d88b25" stroke-width="3"/>
+    <path d="M278 32v23" fill="none" stroke="#071c3c" stroke-width="3"/>
+
+    <!-- right-side windmill / compass -->
+    <path d="M371 72 386 177" fill="none" stroke-width="4"/>
+    <path d="m385 81-18-43 5-3 22 38Z" fill="#eef1f3" stroke-width="2"/>
+    <path d="m386 82 40-20 3 5-37 24Z" fill="#eef1f3" stroke-width="2"/>
+    <path d="m386 85 21 41-5 3-25-39Z" fill="#eef1f3" stroke-width="2"/>
+    <circle cx="386" cy="83" r="5" fill="url(#goldLight)" stroke-width="2"/>
+    <path d="m371 72 18-5" fill="none" stroke="#071c3c" stroke-width="3"/>
+  </g>
+
+  <!-- Gold travel landscape behind the monogram -->
+  <g fill="url(#gold)" stroke="#a6661b" stroke-width="2">
+    <path d="m75 201 38-43 39 43Z"/>
+    <path d="m405 201 34-55 43 55Z"/>
+  </g>
+  <path d="M84 201h396" fill="none" stroke="#c8923c" stroke-width="2"/>
+
+  <!-- Monogram -->
+  <text x="192" y="194" fill="url(#navy)" font-family="Arial Black, Arial, sans-serif" font-size="120" font-weight="900" letter-spacing="-12" filter="url(#softShadow)">FR</text>
+  <path d="M226 192c20-9 39-9 58-1" fill="none" stroke="#d9a24b" stroke-width="3"/>
+
+  <!-- Plane divider -->
+  <g fill="#071c3c">
+    <path d="m281 205 42-4-15 8 23 4-4 4-30-3-13 8 7-12-16-4Z"/>
+  </g>
+  <path d="M66 218h468" stroke="#c9a05b" stroke-width="2"/>
+
+  <text x="300" y="248" text-anchor="middle" fill="#071c3c" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="700" letter-spacing="8">FLIGHT RIGHT</text>
+  <text x="300" y="278" text-anchor="middle" fill="#071c3c" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="500" letter-spacing="1.6">Your Journey, Our Priority</text>
+</svg>
