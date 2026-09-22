@@ -4459,6 +4459,7 @@ function BookingPage() {
               Email
               <input
                 required
+                name="email"
                 type="email"
                 className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
                 placeholder="you@example.com"
