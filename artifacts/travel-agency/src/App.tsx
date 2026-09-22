@@ -2876,7 +2876,7 @@ function Home() {
             backgroundBlendMode: "overlay",
           }}
         >
-          <div className="absolute inset-0 bg-[#173846]/85" />
+          <div className="absolute inset-0 bg-[#173846]/75" />
           <div className="absolute inset-0 opacity-20 wander-grid" />
           <div className="relative mx-auto max-w-[1320px] px-5 pb-10 pt-14 lg:px-10 lg:pb-16 lg:pt-20">
             <div className="mb-7 text-[11px] font-bold uppercase tracking-[0.24em] text-[#f6c94b]">
@@ -3332,7 +3332,7 @@ function Home() {
           backgroundBlendMode: "overlay",
         }}
       >
-        <div className="absolute inset-0 bg-[#f5efe5]/90" />
+        <div className="absolute inset-0 bg-[#f5efe5]/70" />
         <div className="relative mx-auto max-w-[1320px] px-5 py-10 lg:px-10">
           <div className="grid gap-8 md:grid-cols-[1.5fr_.8fr_.8fr_.8fr]">
             <div>
