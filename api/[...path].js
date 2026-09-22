@@ -1,3 +1,1 @@
-import app from "./handler.mjs";
-
-export default app;
+export { default } from "./handler.mjs";

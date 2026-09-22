@@ -1,7 +1,16 @@
 {
-  "buildCommand": "pnpm --filter @workspace/api-server build && pnpm --filter @workspace/travel-agency build",
+  "buildCommand": "pnpm --filter @workspace/api-server build && pnpm --filter @workspace/travel-agency build && cp artifacts/api-server/dist/vercel.mjs api/handler.mjs",
   "outputDirectory": "artifacts/travel-agency/dist/public",
   "installCommand": "pnpm install --frozen-lockfile",
   "framework": null,
-  "rewrites": [{ "source": "/((?!api(?:/|$)).*)", "destination": "/index.html" }]
+  "functions": {
+    "api/**/*.js": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  },
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/api/:path*" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }
