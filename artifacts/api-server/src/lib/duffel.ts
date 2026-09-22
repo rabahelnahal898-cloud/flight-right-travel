@@ -9,6 +9,13 @@ type DuffelOffer = {
   slices?: Array<{ duration?: string; segments?: Array<{ departing_at: string; arriving_at: string; marketing_carrier?: { iata_code?: string }; marketing_carrier_flight_number?: string }> }>;
 };
 
+function formatDuration(duration: string | undefined) {
+  if (!duration) return "-";
+  const match = duration.match(/^PT(?:(\d+)H)?(?:(\d+)M)?$/);
+  if (!match) return duration;
+  return `${match[1] ? `${match[1]}h ` : ""}${match[2] || "0"}m`.trim();
+}
+
 function formatOffer(offer: DuffelOffer, cabin: string): FlightOfferData {
   const slice = offer.slices?.[0];
   const first = slice?.segments?.[0];
@@ -19,7 +26,7 @@ function formatOffer(offer: DuffelOffer, cabin: string): FlightOfferData {
     flightNumber: `${first?.marketing_carrier?.iata_code || ""} ${first?.marketing_carrier_flight_number || ""}`.trim(),
     departTime: first ? new Date(first.departing_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "-",
     arriveTime: last ? new Date(last.arriving_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "-",
-    duration: slice?.duration || "-",
+    duration: formatDuration(slice?.duration),
     stops: `${Math.max(0, (slice?.segments?.length || 1) - 1)} stop${(slice?.segments?.length || 1) === 2 ? "" : "s"}`,
     price: offer.total_amount,
     currency: offer.total_currency,
@@ -36,7 +43,7 @@ export async function searchDuffelFlights(input: FlightSearchInput) {
   const response = await fetch(`${config.duffelApiUrl}/air/offer_requests`, {
     method: "POST",
     headers: { Authorization: `Bearer ${config.duffelToken}`, "Content-Type": "application/json", "Duffel-Version": "v2" },
-    body: JSON.stringify({ data: { slices, passengers, cabin_class: input.cabin.toLowerCase().replace(" ", "_") } }),
+    body: JSON.stringify({ data: { slices, passengers, cabin_class: input.cabin.toLowerCase().replace(" ", "_"), return_offers: true } }),
   });
   if (!response.ok) throw new Error(`Duffel offer request failed with ${response.status}`);
   const payload = await response.json() as { data?: { id?: string; offers?: DuffelOffer[] } };
@@ -51,4 +58,9 @@ export async function getDuffelOffer(offerId: string) {
   if (!response.ok) throw new Error(`Duffel offer lookup failed with ${response.status}`);
   const payload = await response.json() as { data?: DuffelOffer };
   return payload.data || null;
+}
+
+export async function getDuffelOfferData(offerId: string, cabin: string) {
+  const offer = await getDuffelOffer(offerId);
+  return offer ? formatOffer(offer, cabin) : null;
 }

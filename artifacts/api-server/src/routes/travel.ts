@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { Router, type IRouter } from "express";
 import { BookingRequest, ContactRequest, FlightSearchRequest, NewsletterRequest, PartnerApplication, ServiceRequest, TripLookupRequest } from "@workspace/api-zod";
 import { config } from "../lib/config";
-import { searchDuffelFlights } from "../lib/duffel";
+import { getDuffelOfferData, searchDuffelFlights } from "../lib/duffel";
 import { createBooking, createPartnerApplication, createServiceRequest, findBookings, saveContact, subscribe } from "../lib/store";
 import { notifyTeam } from "../lib/notifications";
 
@@ -20,7 +20,7 @@ router.post("/flights/search", async (req, res, next) => {
 router.get("/flights/offers/:offerId", async (req, res, next) => {
   try {
     if (!config.duffelEnabled) return res.status(503).json({ error: "Duffel is not configured", code: "DUFFEL_NOT_CONFIGURED" });
-    const offer = await (await import("../lib/duffel")).getDuffelOffer(req.params.offerId);
+    const offer = await getDuffelOfferData(req.params.offerId, String(req.query.cabin || "Economy"));
     if (!offer) return res.status(404).json({ error: "Offer not found" });
     return res.json({ source: "duffel", offer });
   } catch (error) { next(error); }

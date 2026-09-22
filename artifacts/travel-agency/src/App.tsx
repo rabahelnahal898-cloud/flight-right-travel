@@ -466,6 +466,7 @@ type FlightOffer = {
   duration: string;
   stops: string;
   price: string;
+  currency?: string;
   cabin: string;
 };
 
@@ -792,6 +793,28 @@ function searchHref(search: FlightSearch) {
     cabin: search.cabin,
   });
   return `/flights?${params.toString()}`;
+}
+
+function formatOfferPrice(offer: FlightOffer) {
+  if (offer.price.startsWith('€')) return offer.price;
+  return `${offer.currency === 'EUR' || !offer.currency ? '€' : `${offer.currency} `}${offer.price}`;
+}
+
+async function fetchFlightOffers(search: FlightSearch) {
+  const response = await fetch(`${apiBaseUrl}/api/flights/search`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(search),
+  });
+  if (!response.ok) throw new Error('Live flight search is unavailable.');
+  return await response.json() as { source: 'duffel' | 'demo'; offers: FlightOffer[] };
+}
+
+async function fetchFlightOffer(offerId: string, cabin: string) {
+  const response = await fetch(`${apiBaseUrl}/api/flights/offers/${encodeURIComponent(offerId)}?cabin=${encodeURIComponent(cabin)}`);
+  if (!response.ok) throw new Error('Live flight offer is unavailable.');
+  const result = await response.json() as { offer: FlightOffer };
+  return result.offer;
 }
 
 const holidayPackages = [
@@ -1595,8 +1618,23 @@ function FlightsPage() {
   const [location, setLocation] = useLocation();
   const initialSearch = buildFlightSearch(new URLSearchParams(location.split('?')[1] || ''));
   const [search, setSearch] = useState(initialSearch);
+  const [liveOffers, setLiveOffers] = useState<FlightOffer[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchError, setSearchError] = useState('');
   const [sort, setSort] = useState('recommended');
-  const offers = sort === 'price' ? [...demoOffers].sort((a, b) => Number(a.price.slice(1)) - Number(b.price.slice(1))) : demoOffers;
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setSearchError('');
+    fetchFlightOffers(initialSearch).then((result) => {
+      if (!cancelled) setLiveOffers(result.offers);
+    }).catch((error) => {
+      if (!cancelled) setSearchError(error instanceof Error ? error.message : 'Live flight search is unavailable.');
+    }).finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, [location]);
+  const availableOffers = liveOffers.length ? liveOffers : demoOffers;
+  const offers = sort === 'price' ? [...availableOffers].sort((a, b) => Number.parseFloat(a.price.replace(/[^\d.]/g, '')) - Number.parseFloat(b.price.replace(/[^\d.]/g, ''))) : availableOffers;
 
   return (
     <PageFrame
@@ -1617,6 +1655,8 @@ function FlightsPage() {
             </select>
           </label>
         </div>
+        {loading && <p className="mt-6 text-sm text-[#617277]">Searching live flight offers...</p>}
+        {searchError && <p role="alert" className="mt-6 text-sm font-semibold text-[#c75a3b]">{searchError}</p>}
         <div className="mt-6 space-y-4">
           {offers.map((offer) => (
             <div key={offer.id} className="grid gap-5 rounded-[22px] border border-[#d7cdbb] bg-[#f7f0e4] p-5 lg:grid-cols-[1fr_auto_auto] lg:items-center">
@@ -1624,7 +1664,7 @@ function FlightsPage() {
                 <p className="text-sm font-bold text-[#173846]">{offer.airline} <span className="font-normal text-[#617277]">{offer.flightNumber}</span></p>
                 <div className="mt-3 flex flex-wrap items-center gap-4 text-sm text-[#173846]"><strong>{offer.departTime}</strong><ArrowRight className="h-4 w-4 text-[#c75a3b]" /><strong>{offer.arriveTime}</strong><span className="text-[#617277]">{offer.duration} · {offer.stops}</span></div>
               </div>
-              <div className="font-mono-custom text-2xl font-bold text-[#173846]">{offer.price}<span className="ml-2 font-sans text-xs font-normal text-[#617277]">per traveller</span></div>
+              <div className="font-mono-custom text-2xl font-bold text-[#173846]">{formatOfferPrice(offer)}<span className="ml-2 font-sans text-xs font-normal text-[#617277]">per traveller</span></div>
               <a href={`/flight-offers/${offer.id}?${new URLSearchParams({ from: search.from, to: search.to, depart: search.departDate, return: search.returnDate, passengers: String(search.passengers), cabin: search.cabin })}`} className="inline-flex items-center justify-center gap-2 rounded-full bg-[#173846] px-5 py-3 text-sm font-bold text-[#f7edcf]">View details <ChevronRight className="h-4 w-4" /></a>
             </div>
           ))}
@@ -1771,8 +1811,13 @@ function DestinationDetailPage() {
 function FlightDetailsPage() {
   const [, params] = useRoute('/flight-offers/:id');
   const [location] = useLocation();
-  const offer = demoOffers.find((item) => item.id === params?.id) || demoOffers[0];
   const search = buildFlightSearch(new URLSearchParams(location.split('?')[1] || ''));
+  const [liveOffer, setLiveOffer] = useState<FlightOffer | null>(null);
+  const offer = liveOffer || demoOffers.find((item) => item.id === params?.id) || demoOffers[0];
+  useEffect(() => {
+    if (!params?.id || params.id.startsWith('fr-')) return;
+    fetchFlightOffer(params.id, search.cabin).then(setLiveOffer).catch(() => undefined);
+  }, [params?.id, search.cabin]);
   const bookingQuery = new URLSearchParams({ from: search.from, to: search.to, depart: search.departDate, return: search.returnDate, passengers: String(search.passengers), cabin: search.cabin });
 
   return (
@@ -1803,7 +1848,12 @@ function BookingPage() {
   const [, params] = useRoute('/book/:id');
   const [location] = useLocation();
   const search = buildFlightSearch(new URLSearchParams(location.split('?')[1] || ''));
-  const offer = demoOffers.find((item) => item.id === params?.id) || demoOffers[0];
+  const [liveOffer, setLiveOffer] = useState<FlightOffer | null>(null);
+  const offer = liveOffer || demoOffers.find((item) => item.id === params?.id) || demoOffers[0];
+  useEffect(() => {
+    if (!params?.id || params.id.startsWith('fr-')) return;
+    fetchFlightOffer(params.id, search.cabin).then(setLiveOffer).catch(() => undefined);
+  }, [params?.id, search.cabin]);
   const [submitted, setSubmitted] = useState(false);
   const [bookingId, setBookingId] = useState('');
   const [error, setError] = useState('');
@@ -1834,7 +1884,7 @@ function BookingPage() {
   }
 
   return (
-    <PageFrame title="Passenger details" intro="Complete the request form to continue. Payment is intentionally not collected in this prototype; the API integration will add secure Duffel payment handling here.">
+    <PageFrame title="Passenger details" intro="Complete the request form to continue. Your selected live offer will be rechecked before any payment step.">
       <form onSubmit={async (event) => { event.preventDefault(); setError(''); const form = new FormData(event.currentTarget); try { const response = await fetch(`${apiBaseUrl}/api/bookings`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ offerId: offer.id, firstName: form.get('firstName'), lastName: form.get('lastName'), email: form.get('email'), phone: form.get('phone'), search }) }); if (!response.ok) throw new Error('We could not create the booking request.'); const result = await response.json() as { id: string }; setBookingId(result.id); setSubmitted(true); } catch (submissionError) { setError(submissionError instanceof Error ? submissionError.message : 'We could not create the booking request.'); } }} className="grid gap-8 lg:grid-cols-[1fr_.75fr]">
         <div className="rounded-[28px] border border-[#d7cdbb] bg-white p-8 shadow-sm">
           <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#c75a3b]">Lead traveller</p>
@@ -1847,7 +1897,7 @@ function BookingPage() {
           {error && <p role="alert" className="mt-5 text-sm font-semibold text-[#c75a3b]">{error}</p>}
           <button type="submit" className="mt-7 inline-flex items-center gap-2 rounded-full bg-[#c75a3b] px-6 py-3 text-sm font-bold text-[#fff4e3]">Send booking request <ArrowRight className="h-4 w-4" /></button>
         </div>
-        <div className="rounded-[28px] bg-[#173846] p-8 text-[#f7edcf] shadow-sm"><p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#f6c94b]">Your itinerary</p><h2 className="mt-4 font-display text-4xl leading-none">{search.from} to {search.to}</h2><p className="mt-4 text-sm text-[#f7edcf]/70">{offer.airline} · {offer.flightNumber}<br />{search.departDate} · {search.passengers} traveller{search.passengers === 1 ? '' : 's'}</p><div className="mt-8 border-t border-[#f7edcf]/20 pt-5"><span className="text-sm text-[#f7edcf]/70">Estimated total</span><strong className="mt-2 block font-mono-custom text-3xl">€{Number(offer.price.slice(1)) * search.passengers}</strong></div></div>
+        <div className="rounded-[28px] bg-[#173846] p-8 text-[#f7edcf] shadow-sm"><p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#f6c94b]">Your itinerary</p><h2 className="mt-4 font-display text-4xl leading-none">{search.from} to {search.to}</h2><p className="mt-4 text-sm text-[#f7edcf]/70">{offer.airline} · {offer.flightNumber}<br />{search.departDate} · {search.passengers} traveller{search.passengers === 1 ? '' : 's'}</p><div className="mt-8 border-t border-[#f7edcf]/20 pt-5"><span className="text-sm text-[#f7edcf]/70">Estimated total</span><strong className="mt-2 block font-mono-custom text-3xl">{offer.currency === 'EUR' || !offer.currency ? '€' : `${offer.currency} `}{(Number.parseFloat(offer.price.replace(/[^\d.]/g, '')) * search.passengers).toFixed(2)}</strong></div></div>
       </form>
     </PageFrame>
   );
