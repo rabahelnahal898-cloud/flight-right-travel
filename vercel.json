@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pnpm --filter @workspace/travel-agency build",
+  "buildCommand": "pnpm --filter @workspace/api-server build && pnpm --filter @workspace/travel-agency build",
   "outputDirectory": "artifacts/travel-agency/dist/public",
   "installCommand": "pnpm install --frozen-lockfile",
   "framework": null,
