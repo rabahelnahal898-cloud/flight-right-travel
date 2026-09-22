@@ -2869,7 +2869,14 @@ function Home() {
         <section
           id="booking"
           className="relative overflow-hidden bg-[#173846] text-[#f7edcf]"
+          style={{
+            backgroundImage: "url('/jeshoots-com-airport-2373727_1920.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundBlendMode: "overlay",
+          }}
         >
+          <div className="absolute inset-0 bg-[#173846]/85" />
           <div className="absolute inset-0 opacity-20 wander-grid" />
           <div className="relative mx-auto max-w-[1320px] px-5 pb-10 pt-14 lg:px-10 lg:pb-16 lg:pt-20">
             <div className="mb-7 text-[11px] font-bold uppercase tracking-[0.24em] text-[#f6c94b]">
@@ -3315,8 +3322,18 @@ function Home() {
         </section>
       </main>
 
-      <footer id="contact" className="border-t border-[#d7cdbb] bg-[#f5efe5]">
-        <div className="mx-auto max-w-[1320px] px-5 py-10 lg:px-10">
+      <footer
+        id="contact"
+        className="relative border-t border-[#d7cdbb] bg-[#f5efe5] overflow-hidden"
+        style={{
+          backgroundImage: "url('/hawksky-plane-3251802_1920.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center bottom",
+          backgroundBlendMode: "overlay",
+        }}
+      >
+        <div className="absolute inset-0 bg-[#f5efe5]/90" />
+        <div className="relative mx-auto max-w-[1320px] px-5 py-10 lg:px-10">
           <div className="grid gap-8 md:grid-cols-[1.5fr_.8fr_.8fr_.8fr]">
             <div>
               <div className="flex items-center">
