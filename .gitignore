@@ -10,3 +10,9 @@ dist/
 .vite/
 coverage/
 *.log
+
+# Prisma agent skills (auto-generated, not needed in repo)
+.agents/
+.claude/
+.cursor/
+.devin/
