@@ -2492,41 +2492,8 @@ const flightRoutes = [
   },
 ];
 
-const demoOffers: FlightOffer[] = [
-  {
-    id: "fr-001",
-    airline: "KLM",
-    flightNumber: "KL 553",
-    departTime: "10:20",
-    arriveTime: "16:45",
-    duration: "4h 25m",
-    stops: "Direct",
-    price: "€245",
-    cabin: "Economy",
-  },
-  {
-    id: "fr-002",
-    airline: "EgyptAir",
-    flightNumber: "MS 758",
-    departTime: "14:10",
-    arriveTime: "20:35",
-    duration: "4h 25m",
-    stops: "Direct",
-    price: "€268",
-    cabin: "Economy",
-  },
-  {
-    id: "fr-003",
-    airline: "Turkish Airlines",
-    flightNumber: "TK 1952",
-    departTime: "11:45",
-    arriveTime: "18:20",
-    duration: "5h 35m",
-    stops: "1 stop",
-    price: "€219",
-    cabin: "Economy",
-  },
-];
+// REMOVED: Mock flight data - using only real Duffel API data
+const demoOffers: FlightOffer[] = [];
 
 function buildFlightSearch(params: URLSearchParams): FlightSearch {
   return {
@@ -3907,7 +3874,7 @@ function FlightsPage() {
       cancelled = true;
     };
   }, [location]);
-  const availableOffers = liveOffers.length ? liveOffers : demoOffers;
+  const availableOffers = liveOffers; // Only use real Duffel data, no mock fallback
   const offers =
     sort === "price"
       ? [...availableOffers].sort(
@@ -3956,6 +3923,11 @@ function FlightsPage() {
         {searchError && (
           <p role="alert" className="mt-6 text-sm font-semibold text-[#c75a3b]">
             {searchError}
+          </p>
+        )}
+        {!loading && !searchError && offers.length === 0 && (
+          <p role="alert" className="mt-6 text-sm font-semibold text-[#c75a3b]">
+            No flights available for this route. The Duffel API may not be configured or there are no flights available for the selected dates.
           </p>
         )}
         <div className="mt-6 space-y-4">
@@ -4206,12 +4178,10 @@ function FlightDetailsPage() {
     new URLSearchParams(location.split("?")[1] || ""),
   );
   const [liveOffer, setLiveOffer] = useState<FlightOffer | null>(null);
-  const offer =
-    liveOffer ||
-    demoOffers.find((item) => item.id === params?.id) ||
-    demoOffers[0];
+  const offer = liveOffer; // Only use real Duffel offers
+  
   useEffect(() => {
-    if (!params?.id || params.id.startsWith("fr-")) return;
+    if (!params?.id) return;
     fetchFlightOffer(params.id, search.cabin)
       .then(setLiveOffer)
       .catch(() => undefined);
@@ -4308,12 +4278,10 @@ function BookingPage() {
     new URLSearchParams(location.split("?")[1] || ""),
   );
   const [liveOffer, setLiveOffer] = useState<FlightOffer | null>(null);
-  const offer =
-    liveOffer ||
-    demoOffers.find((item) => item.id === params?.id) ||
-    demoOffers[0];
+  const offer = liveOffer; // Only use real Duffel offers
+  
   useEffect(() => {
-    if (!params?.id || params.id.startsWith("fr-")) return;
+    if (!params?.id) return;
     fetchFlightOffer(params.id, search.cabin)
       .then(setLiveOffer)
       .catch(() => undefined);
