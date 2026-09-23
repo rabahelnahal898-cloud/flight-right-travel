@@ -2496,11 +2496,17 @@ const flightRoutes = [
 const demoOffers: FlightOffer[] = [];
 
 function buildFlightSearch(params: URLSearchParams): FlightSearch {
+  // Default to 30 days from now
+  const defaultDepartDate = new Date();
+  defaultDepartDate.setDate(defaultDepartDate.getDate() + 30);
+  const defaultReturnDate = new Date(defaultDepartDate);
+  defaultReturnDate.setDate(defaultReturnDate.getDate() + 7);
+  
   return {
     from: params.get("from") || "Amsterdam",
     to: params.get("to") || "Cairo",
-    departDate: params.get("depart") || "2026-02-12",
-    returnDate: params.get("return") || "2026-02-20",
+    departDate: params.get("depart") || defaultDepartDate.toISOString().split('T')[0],
+    returnDate: params.get("return") || defaultReturnDate.toISOString().split('T')[0],
     passengers: Number(params.get("passengers")) || 1,
     cabin: params.get("cabin") || "Economy",
   };
@@ -2696,10 +2702,16 @@ const serviceHighlights = [
 ];
 
 function Home() {
+  // Default to 30 days from now for depart, 37 days for return
+  const defaultDepartDate = new Date();
+  defaultDepartDate.setDate(defaultDepartDate.getDate() + 30);
+  const defaultReturnDate = new Date(defaultDepartDate);
+  defaultReturnDate.setDate(defaultReturnDate.getDate() + 7);
+  
   const [from, setFrom] = useState("Amsterdam");
   const [to, setTo] = useState("Cairo");
-  const [departDate, setDepartDate] = useState("2026-02-12");
-  const [returnDate, setReturnDate] = useState("2026-02-20");
+  const [departDate, setDepartDate] = useState(defaultDepartDate.toISOString().split('T')[0]);
+  const [returnDate, setReturnDate] = useState(defaultReturnDate.toISOString().split('T')[0]);
   const [passengers, setPassengers] = useState(2);
   const [travelType, setTravelType] = useState("Flights");
   const [cabin, setCabin] = useState("Economy");
@@ -3887,7 +3899,7 @@ function FlightsPage() {
   return (
     <PageFrame
       title="Flights"
-      intro="Compare flight options with clear timings, stops and cabin details. This results view is ready to receive live Duffel offers when the API is connected."
+      intro="Real-time flight search powered by Duffel. Compare airlines, prices, and schedules for your journey."
     >
       <div className="rounded-[28px] border border-[#d7cdbb] bg-white p-6 shadow-sm">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
