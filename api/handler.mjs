@@ -36644,6 +36644,17 @@ async function notifyTeam(notification) {
 
 // src/routes/travel.ts
 var router2 = (0, import_express2.Router)();
+router2.get("/health", (req, res) => {
+  res.json({
+    status: "ok",
+    timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+    config: {
+      duffelConfigured: config.duffelEnabled,
+      databaseConfigured: Boolean(process.env.DATABASE_URL),
+      duffelApiUrl: config.duffelApiUrl
+    }
+  });
+});
 router2.post("/flights/search", async (req, res, next) => {
   try {
     const search = FlightSearchRequest.parse(req.body);

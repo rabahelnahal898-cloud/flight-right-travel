@@ -8,6 +8,19 @@ import { notifyTeam } from "../lib/notifications";
 
 const router: IRouter = Router();
 
+// Health check endpoint to verify configuration
+router.get("/health", (req, res) => {
+  res.json({
+    status: "ok",
+    timestamp: new Date().toISOString(),
+    config: {
+      duffelConfigured: config.duffelEnabled,
+      databaseConfigured: Boolean(process.env.DATABASE_URL),
+      duffelApiUrl: config.duffelApiUrl,
+    }
+  });
+});
+
 router.post("/flights/search", async (req, res, next) => {
   try {
     const search = FlightSearchRequest.parse(req.body);
