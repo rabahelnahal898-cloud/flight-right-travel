@@ -46,7 +46,7 @@ import {
 const brandLogo = "/flight-right-logo.svg";
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "";
 const contactEmail =
-  import.meta.env.VITE_CONTACT_EMAIL || "hello@flightright.travel";
+  import.meta.env.VITE_CONTACT_EMAIL || "info@flightrighttravel.international";
 const contactPhone = import.meta.env.VITE_CONTACT_PHONE || "+31 6 29217807";
 const whatsappNumber = (
   import.meta.env.VITE_WHATSAPP_NUMBER || "+201282220484"
