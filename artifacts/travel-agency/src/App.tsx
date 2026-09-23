@@ -2495,16 +2495,74 @@ const flightRoutes = [
 // REMOVED: Mock flight data - using only real Duffel API data
 const demoOffers: FlightOffer[] = [];
 
+const airportCodeMap: Record<string, string> = {
+  amsterdam: "AMS",
+  ams: "AMS",
+  cairo: "CAI",
+  cai: "CAI",
+  istanbul: "IST",
+  ist: "IST",
+  antalya: "AYT",
+  ayt: "AYT",
+  hurghada: "HRG",
+  hrg: "HRG",
+  sharm: "SSH",
+  ssh: "SSH",
+  alexandria: "ALY",
+  aly: "ALY",
+  dubai: "DXB",
+  dxb: "DXB",
+  amman: "AMM",
+  amm: "AMM",
+  beirut: "BEY",
+  bey: "BEY",
+  london: "LHR",
+  lhr: "LHR",
+  paris: "CDG",
+  cdg: "CDG",
+  berlin: "BER",
+  ber: "BER",
+};
+
+const airportLabelMap: Record<string, string> = {
+  AMS: "Amsterdam",
+  CAI: "Cairo",
+  IST: "Istanbul",
+  AYT: "Antalya",
+  HRG: "Hurghada",
+  SSH: "Sharm El Sheikh",
+  ALY: "Alexandria",
+  DXB: "Dubai",
+  AMM: "Amman",
+  BEY: "Beirut",
+  LHR: "London",
+  CDG: "Paris",
+  BER: "Berlin",
+};
+
+function normalizeAirportCode(value: string | null | undefined): string {
+  const raw = (value || "").trim();
+  if (!raw) return "AMS";
+  const direct = airportCodeMap[raw.toLowerCase()];
+  if (direct) return direct;
+  const upper = raw.toUpperCase();
+  return upper.length <= 3 ? upper : upper.slice(0, 3);
+}
+
+function formatAirportLabel(code: string): string {
+  return airportLabelMap[code.toUpperCase()] || code.toUpperCase();
+}
+
 function buildFlightSearch(params: URLSearchParams): FlightSearch {
   // Default to 30 days from now
   const defaultDepartDate = new Date();
   defaultDepartDate.setDate(defaultDepartDate.getDate() + 30);
   const defaultReturnDate = new Date(defaultDepartDate);
   defaultReturnDate.setDate(defaultReturnDate.getDate() + 7);
-  
+
   return {
-    from: params.get("from") || "Amsterdam",
-    to: params.get("to") || "Cairo",
+    from: normalizeAirportCode(params.get("from") || "Amsterdam"),
+    to: normalizeAirportCode(params.get("to") || "Cairo"),
     departDate: params.get("depart") || defaultDepartDate.toISOString().split('T')[0],
     returnDate: params.get("return") || defaultReturnDate.toISOString().split('T')[0],
     passengers: Number(params.get("passengers")) || 1,
@@ -2514,8 +2572,8 @@ function buildFlightSearch(params: URLSearchParams): FlightSearch {
 
 function searchHref(search: FlightSearch) {
   const params = new URLSearchParams({
-    from: search.from,
-    to: search.to,
+    from: normalizeAirportCode(search.from),
+    to: normalizeAirportCode(search.to),
     depart: search.departDate,
     return: search.returnDate,
     passengers: String(search.passengers),
@@ -3908,7 +3966,7 @@ function FlightsPage() {
               Your search
             </p>
             <h2 className="mt-2 font-display text-4xl leading-none tracking-[-0.04em] text-[#173846]">
-              {search.from} to {search.to}
+              {formatAirportLabel(search.from)} to {formatAirportLabel(search.to)}
             </h2>
             <p className="mt-3 text-sm text-[#617277]">
               {search.departDate} · {search.passengers} traveller
