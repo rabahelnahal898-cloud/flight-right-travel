@@ -47,9 +47,9 @@ const brandLogo = "/flight-right-logo.svg";
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "";
 const contactEmail =
   import.meta.env.VITE_CONTACT_EMAIL || "hello@flightright.travel";
-const contactPhone = import.meta.env.VITE_CONTACT_PHONE || "+31 20 555 0160";
+const contactPhone = import.meta.env.VITE_CONTACT_PHONE || "+31 6 29217807";
 const whatsappNumber = (
-  import.meta.env.VITE_WHATSAPP_NUMBER || contactPhone
+  import.meta.env.VITE_WHATSAPP_NUMBER || "+201282220484"
 ).replace(/\D/g, "");
 const businessAddress = "Amsterdam, Netherlands";
 const businessHours = "Monday to Saturday · 09:00–18:00 CET";
@@ -3696,7 +3696,7 @@ function PressPage() {
           </p>
           <div className="mt-6 space-y-3 text-sm text-[#f7edcf]/85">
             <p>Email: press@flightright.travel</p>
-            <p>Phone: +31 20 555 0160</p>
+            <p>Phone: +31 6 29217807</p>
             <p>Office: Amsterdam, Netherlands</p>
           </div>
         </div>
