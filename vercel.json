@@ -7,10 +7,14 @@
     "api/handler.mjs": {
       "memory": 1024,
       "maxDuration": 10
+    },
+    "api/index.mjs": {
+      "memory": 1024,
+      "maxDuration": 10
     }
   },
   "rewrites": [
-    { "source": "/api/:path*", "destination": "/api" },
+    { "source": "/api/:path*", "destination": "/api/index" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
