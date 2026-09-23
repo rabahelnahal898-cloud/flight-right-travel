@@ -11,9 +11,43 @@ const router: IRouter = Router();
 router.post("/flights/search", async (req, res, next) => {
   try {
     const search = FlightSearchRequest.parse(req.body);
-    const live = await searchDuffelFlights(search);
-    if (live) return res.json({ searchId: live.searchId, source: "duffel", search, offers: live.offers });
-    return res.json({ searchId: `demo-${randomUUID()}`, source: "demo", search, offers: [] });
+    
+    // Check if Duffel is configured
+    if (!config.duffelToken) {
+      console.error("DUFFEL_API_TOKEN not configured");
+      return res.status(503).json({ 
+        error: "Flight search service not configured. Please contact support.",
+        code: "DUFFEL_NOT_CONFIGURED",
+        searchId: `demo-${randomUUID()}`,
+        source: "error",
+        offers: []
+      });
+    }
+    
+    try {
+      const live = await searchDuffelFlights(search);
+      if (live && live.offers.length > 0) {
+        return res.json({ searchId: live.searchId, source: "duffel", search, offers: live.offers });
+      }
+      
+      // No offers found
+      return res.json({ 
+        searchId: `demo-${randomUUID()}`, 
+        source: "duffel", 
+        search, 
+        offers: [],
+        message: "No flights found for this route and date. Try different dates or airports."
+      });
+    } catch (duffelError) {
+      console.error("Duffel API error:", duffelError);
+      return res.status(503).json({
+        error: duffelError instanceof Error ? duffelError.message : "Flight search failed",
+        code: "DUFFEL_API_ERROR",
+        searchId: `demo-${randomUUID()}`,
+        source: "error",
+        offers: []
+      });
+    }
   } catch (error) { next(error); }
 });
 

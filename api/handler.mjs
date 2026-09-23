@@ -36363,17 +36363,26 @@ function formatOffer(offer, cabin) {
   };
 }
 async function searchDuffelFlights(input) {
-  if (!config.duffelToken) return null;
+  if (!config.duffelToken) {
+    console.error("Duffel API token not configured");
+    return null;
+  }
   const passengers = Array.from({ length: input.passengers }, () => ({ type: "adult" }));
   const slices = [{ origin: input.from, destination: input.to, departure_date: input.departDate }];
   if (input.returnDate) slices.push({ origin: input.to, destination: input.from, departure_date: input.returnDate });
+  console.log("Calling Duffel API:", { from: input.from, to: input.to, date: input.departDate });
   const response = await fetch(`${config.duffelApiUrl}/air/offer_requests`, {
     method: "POST",
     headers: { Authorization: `Bearer ${config.duffelToken}`, "Content-Type": "application/json", "Duffel-Version": "v2" },
     body: JSON.stringify({ data: { slices, passengers, cabin_class: input.cabin.toLowerCase().replace(" ", "_"), return_offers: true } })
   });
-  if (!response.ok) throw new Error(`Duffel offer request failed with ${response.status}`);
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error(`Duffel API error ${response.status}:`, errorText);
+    throw new Error(`Duffel offer request failed with ${response.status}: ${errorText}`);
+  }
   const payload = await response.json();
+  console.log(`Duffel returned ${payload.data?.offers?.length || 0} offers`);
   return { searchId: payload.data?.id || "duffel-search", offers: (payload.data?.offers || []).map((offer) => formatOffer(offer, input.cabin)) };
 }
 async function getDuffelOffer(offerId) {
@@ -36638,9 +36647,38 @@ var router2 = (0, import_express2.Router)();
 router2.post("/flights/search", async (req, res, next) => {
   try {
     const search = FlightSearchRequest.parse(req.body);
-    const live = await searchDuffelFlights(search);
-    if (live) return res.json({ searchId: live.searchId, source: "duffel", search, offers: live.offers });
-    return res.json({ searchId: `demo-${randomUUID()}`, source: "demo", search, offers: [] });
+    if (!config.duffelToken) {
+      console.error("DUFFEL_API_TOKEN not configured");
+      return res.status(503).json({
+        error: "Flight search service not configured. Please contact support.",
+        code: "DUFFEL_NOT_CONFIGURED",
+        searchId: `demo-${randomUUID()}`,
+        source: "error",
+        offers: []
+      });
+    }
+    try {
+      const live = await searchDuffelFlights(search);
+      if (live && live.offers.length > 0) {
+        return res.json({ searchId: live.searchId, source: "duffel", search, offers: live.offers });
+      }
+      return res.json({
+        searchId: `demo-${randomUUID()}`,
+        source: "duffel",
+        search,
+        offers: [],
+        message: "No flights found for this route and date. Try different dates or airports."
+      });
+    } catch (duffelError) {
+      console.error("Duffel API error:", duffelError);
+      return res.status(503).json({
+        error: duffelError instanceof Error ? duffelError.message : "Flight search failed",
+        code: "DUFFEL_API_ERROR",
+        searchId: `demo-${randomUUID()}`,
+        source: "error",
+        offers: []
+      });
+    }
   } catch (error) {
     next(error);
   }

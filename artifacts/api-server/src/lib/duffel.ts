@@ -36,18 +36,32 @@ function formatOffer(offer: DuffelOffer, cabin: string): FlightOfferData {
 }
 
 export async function searchDuffelFlights(input: FlightSearchInput) {
-  if (!config.duffelToken) return null;
+  if (!config.duffelToken) {
+    console.error("Duffel API token not configured");
+    return null;
+  }
 
   const passengers = Array.from({ length: input.passengers }, () => ({ type: "adult" }));
   const slices = [{ origin: input.from, destination: input.to, departure_date: input.departDate }];
   if (input.returnDate) slices.push({ origin: input.to, destination: input.from, departure_date: input.returnDate });
+  
+  console.log("Calling Duffel API:", { from: input.from, to: input.to, date: input.departDate });
+  
   const response = await fetch(`${config.duffelApiUrl}/air/offer_requests`, {
     method: "POST",
     headers: { Authorization: `Bearer ${config.duffelToken}`, "Content-Type": "application/json", "Duffel-Version": "v2" },
     body: JSON.stringify({ data: { slices, passengers, cabin_class: input.cabin.toLowerCase().replace(" ", "_"), return_offers: true } }),
   });
-  if (!response.ok) throw new Error(`Duffel offer request failed with ${response.status}`);
+  
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error(`Duffel API error ${response.status}:`, errorText);
+    throw new Error(`Duffel offer request failed with ${response.status}: ${errorText}`);
+  }
+  
   const payload = await response.json() as { data?: { id?: string; offers?: DuffelOffer[] } };
+  console.log(`Duffel returned ${payload.data?.offers?.length || 0} offers`);
+  
   return { searchId: payload.data?.id || "duffel-search", offers: (payload.data?.offers || []).map((offer) => formatOffer(offer, input.cabin)) };
 }
 
