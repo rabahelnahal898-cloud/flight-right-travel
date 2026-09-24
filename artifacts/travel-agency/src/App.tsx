@@ -3182,8 +3182,17 @@ function Home() {
           </div>
         </section>
 
-        <section className="border-y border-[#d7cdbb] bg-[#f0e6d6]">
-          <div className="mx-auto max-w-[1320px] px-5 py-24 lg:px-10 lg:py-28">
+        <section className="relative border-y border-[#d7cdbb] overflow-hidden">
+          {/* Background Image */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center"
+            style={{
+              backgroundImage: "url('/wikiimages-earth-11595_1920.jpg')",
+            }}
+          />
+          <div className="absolute inset-0 bg-[#f0e6d6]/85" />
+          
+          <div className="relative mx-auto max-w-[1320px] px-5 py-24 lg:px-10 lg:py-28">
             <div className="mb-10 text-center">
               <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#c75a3b]">
                 Featured routes
