@@ -4279,13 +4279,29 @@ function FlightDetailsPage() {
   );
   const [liveOffer, setLiveOffer] = useState<FlightOffer | null>(null);
   const offer = liveOffer; // Only use real Duffel offers
-  
+
   useEffect(() => {
     if (!params?.id) return;
     fetchFlightOffer(params.id, search.cabin)
       .then(setLiveOffer)
       .catch(() => undefined);
   }, [params?.id, search.cabin]);
+
+  if (!offer) {
+    return (
+      <PageFrame
+        title="Flight details"
+        intro="Review the itinerary, fare and passenger details before sending your booking request. Final availability and price will come from Duffel once connected."
+      >
+        <div className="rounded-[28px] border border-[#d7cdbb] bg-white p-8 text-center shadow-sm">
+          <p className="text-sm font-semibold text-[#173846]">
+            Loading flight details...
+          </p>
+        </div>
+      </PageFrame>
+    );
+  }
+
   const bookingQuery = new URLSearchParams({
     from: search.from,
     to: search.to,
@@ -4379,13 +4395,14 @@ function BookingPage() {
   );
   const [liveOffer, setLiveOffer] = useState<FlightOffer | null>(null);
   const offer = liveOffer; // Only use real Duffel offers
-  
+
   useEffect(() => {
     if (!params?.id) return;
     fetchFlightOffer(params.id, search.cabin)
       .then(setLiveOffer)
       .catch(() => undefined);
   }, [params?.id, search.cabin]);
+
   const [submitted, setSubmitted] = useState(false);
   const [bookingId, setBookingId] = useState("");
   const [error, setError] = useState("");
@@ -4422,6 +4439,21 @@ function BookingPage() {
       setPaymentLoading(false);
     }
   };
+
+  if (!offer) {
+    return (
+      <PageFrame
+        title="Passenger details"
+        intro="Complete the request form to continue. Your selected live offer will be rechecked before any payment step."
+      >
+        <div className="rounded-[28px] border border-[#d7cdbb] bg-white p-8 text-center shadow-sm">
+          <p className="text-sm font-semibold text-[#173846]">
+            Loading flight booking details...
+          </p>
+        </div>
+      </PageFrame>
+    );
+  }
 
   if (submitted) {
     return (
