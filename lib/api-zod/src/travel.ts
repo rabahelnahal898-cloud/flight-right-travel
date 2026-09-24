@@ -29,12 +29,36 @@ export const FlightSearchResponse = z.object({
   offers: z.array(FlightOffer),
 });
 
+export const PassengerRequest = z.object({
+  firstName: z.string().trim().min(1).max(80),
+  lastName: z.string().trim().min(1).max(80),
+  email: z.string().email().optional(),
+  phone: z.string().trim().min(6).max(40).optional(),
+  title: z.enum(["Mr", "Ms", "Mrs", "Miss", "Dr"]).default("Mr"),
+  gender: z.enum(["Male", "Female"]).default("Male"),
+  dateOfBirth: z.string().trim().min(1),
+  nationality: z.string().trim().min(1).max(80).default(""),
+  passportNumber: z.string().trim().min(1).max(80).default(""),
+  passportCountry: z.string().trim().min(1).max(80).default(""),
+  passportExpiry: z.string().trim().min(1).default(""),
+});
+
 export const BookingRequest = z.object({
   offerId: z.string().min(1),
   firstName: z.string().trim().min(1).max(80),
   lastName: z.string().trim().min(1).max(80),
   email: z.string().email(),
   phone: z.string().trim().min(6).max(40),
+  title: z.enum(["Mr", "Ms", "Mrs", "Miss", "Dr"]).default("Mr"),
+  gender: z.enum(["Male", "Female"]).default("Male"),
+  dateOfBirth: z.string().trim().min(1),
+  nationality: z.string().trim().min(1).max(80).default(""),
+  passportNumber: z.string().trim().min(1).max(80).default(""),
+  passportCountry: z.string().trim().min(1).max(80).default(""),
+  passportExpiry: z.string().trim().min(1).default(""),
+  amount: z.string().trim().min(1),
+  currency: z.string().trim().min(1).default("EUR"),
+  passengers: z.array(PassengerRequest).min(1),
   search: FlightSearchRequest,
 });
 

@@ -4511,16 +4511,30 @@ function BookingPage() {
           event.preventDefault();
           setError("");
           const form = new FormData(event.currentTarget);
+          const passenger = {
+            firstName: String(form.get("firstName") || "").trim(),
+            lastName: String(form.get("lastName") || "").trim(),
+            email: String(form.get("email") || "").trim(),
+            phone: String(form.get("phone") || "").trim(),
+            title: String(form.get("title") || "Mr"),
+            gender: String(form.get("gender") || "Male"),
+            dateOfBirth: String(form.get("dateOfBirth") || "").trim(),
+            nationality: String(form.get("nationality") || "").trim(),
+            passportNumber: String(form.get("passportNumber") || "").trim(),
+            passportCountry: String(form.get("passportCountry") || "").trim(),
+            passportExpiry: String(form.get("passportExpiry") || "").trim(),
+          };
+
           try {
             const response = await fetch(`${apiBaseUrl}/api/bookings`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
                 offerId: offer.id,
-                firstName: form.get("firstName"),
-                lastName: form.get("lastName"),
-                email: form.get("email"),
-                phone: form.get("phone"),
+                ...passenger,
+                amount: Number.parseFloat(offer.price.replace(/[^\d.]/g, "")).toFixed(2).toString(),
+                currency: offer.currency || "EUR",
+                passengers: [passenger],
                 search,
               }),
             });
@@ -4545,6 +4559,33 @@ function BookingPage() {
           </p>
           <div className="mt-6 grid gap-5 md:grid-cols-2">
             <label className="text-sm font-medium text-[#173846]">
+              Title
+              <select
+                required
+                name="title"
+                defaultValue="Mr"
+                className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
+              >
+                <option value="Mr">Mr</option>
+                <option value="Ms">Ms</option>
+                <option value="Mrs">Mrs</option>
+                <option value="Miss">Miss</option>
+                <option value="Dr">Dr</option>
+              </select>
+            </label>
+            <label className="text-sm font-medium text-[#173846]">
+              Gender
+              <select
+                required
+                name="gender"
+                defaultValue="Male"
+                className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
+              >
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </label>
+            <label className="text-sm font-medium text-[#173846]">
               First name
               <input
                 required
@@ -4557,6 +4598,51 @@ function BookingPage() {
               <input
                 required
                 name="lastName"
+                className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
+              />
+            </label>
+            <label className="text-sm font-medium text-[#173846] md:col-span-2">
+              Date of birth
+              <input
+                required
+                name="dateOfBirth"
+                type="date"
+                className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
+              />
+            </label>
+            <label className="text-sm font-medium text-[#173846] md:col-span-2">
+              Nationality
+              <input
+                required
+                name="nationality"
+                className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
+                placeholder="e.g. Dutch"
+              />
+            </label>
+            <label className="text-sm font-medium text-[#173846] md:col-span-2">
+              Passport number
+              <input
+                required
+                name="passportNumber"
+                className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
+                placeholder="P1234567"
+              />
+            </label>
+            <label className="text-sm font-medium text-[#173846] md:col-span-2">
+              Passport country
+              <input
+                required
+                name="passportCountry"
+                className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
+                placeholder="e.g. Netherlands"
+              />
+            </label>
+            <label className="text-sm font-medium text-[#173846] md:col-span-2">
+              Passport expiry date
+              <input
+                required
+                name="passportExpiry"
+                type="date"
                 className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
               />
             </label>
