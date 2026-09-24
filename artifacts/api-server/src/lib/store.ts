@@ -1,8 +1,20 @@
-import { PrismaClient } from "@prisma/client";
+import type { PrismaClient as PrismaClientType } from "@prisma/client";
 import type { BookingInput, PartnerApplicationInput, ServiceRequestInput } from "@workspace/api-zod";
 
-// Initialize Prisma Client
-const prisma = new PrismaClient();
+let prisma: PrismaClientType | null = null;
+
+async function getPrismaClient(): Promise<PrismaClientType> {
+  if (!process.env.DATABASE_URL) {
+    throw new Error("Database is not configured.");
+  }
+
+  if (!prisma) {
+    const { PrismaClient } = await import("@prisma/client");
+    prisma = new PrismaClient();
+  }
+
+  return prisma;
+}
 
 export type BookingRecord = BookingInput & {
   id: string;
@@ -17,7 +29,8 @@ export async function createBooking(
   input: BookingInput,
   duffelData?: { orderId: string; bookingReference: string; paymentStatus: string }
 ): Promise<BookingRecord> {
-  const booking = await prisma.booking.create({
+  const client = await getPrismaClient();
+  const booking = await client.booking.create({
     data: {
       offerId: input.offerId,
       amount: input.amount,
@@ -50,7 +63,8 @@ export async function createBooking(
 }
 
 export async function findBookings(reference: string, email: string) {
-  const bookings = await prisma.booking.findMany({
+  const client = await getPrismaClient();
+  const bookings = await client.booking.findMany({
     where: {
       OR: [
         { id: { equals: reference, mode: "insensitive" } },
@@ -83,7 +97,8 @@ export async function findBookings(reference: string, email: string) {
 }
 
 export async function saveContact(input: Record<string, string>) {
-  await prisma.contact.create({
+  const client = await getPrismaClient();
+  await client.contact.create({
     data: {
       name: input.name || "",
       email: input.email || "",
@@ -94,7 +109,8 @@ export async function saveContact(input: Record<string, string>) {
 }
 
 export async function subscribe(email: string) {
-  await prisma.subscriber.upsert({
+  const client = await getPrismaClient();
+  await client.subscriber.upsert({
     where: { email: email.toLowerCase() },
     update: {},
     create: { email: email.toLowerCase() },
@@ -102,7 +118,8 @@ export async function subscribe(email: string) {
 }
 
 export async function getBooking(id: string) {
-  const booking = await prisma.booking.findUnique({
+  const client = await getPrismaClient();
+  const booking = await client.booking.findUnique({
     where: { id },
   });
 
@@ -131,7 +148,8 @@ export async function getBooking(id: string) {
 }
 
 export async function createServiceRequest(input: ServiceRequestInput) {
-  const request = await prisma.serviceRequest.create({
+  const client = await getPrismaClient();
+  const request = await client.serviceRequest.create({
     data: {
       name: input.name,
       email: input.email,
@@ -152,7 +170,8 @@ export async function createServiceRequest(input: ServiceRequestInput) {
 }
 
 export async function createPartnerApplication(input: PartnerApplicationInput) {
-  const application = await prisma.partnerApplication.create({
+  const client = await getPrismaClient();
+  const application = await client.partnerApplication.create({
     data: {
       business: input.business,
       email: input.email,
