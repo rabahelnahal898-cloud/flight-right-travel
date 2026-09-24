@@ -162,6 +162,8 @@ const translations: Record<"ar" | "nl", Record<string, string>> = {
       "لم يتم العثور على حجز بهذه البيانات.",
     "Where will": "إلى أين",
     "you go next?": "ستسافر بعد ذلك؟",
+    "Real-time flight search. Compare airlines, prices, and schedules for your journey.":
+      "بحث فوري عن الرحلات. قارن بين شركات الطيران والأسعار وجدول الرحلات لرحلتك.",
     "Travel support built around real trips": "دعم سفر مصمم لرحلات حقيقية",
     "From ancient wonders to island coastlines — ten places our travelers can’t stop booking.":
       "من العجائب القديمة إلى السواحل والجزر، عشر وجهات يواصل عملاؤنا حجزها.",
@@ -306,6 +308,8 @@ const translations: Record<"ar" | "nl", Record<string, string>> = {
       "Geen boeking gevonden voor deze gegevens.",
     "Where will": "Waar",
     "you go next?": "ga je naartoe?",
+    "Real-time flight search. Compare airlines, prices, and schedules for your journey.":
+      "Realtime vluchten zoeken. Vergelijk luchtvaartmaatschappijen, prijzen en dienstregelingen voor je reis.",
     "Travel support built around real trips":
       "Reisondersteuning voor echte reizen",
     "From ancient wonders to island coastlines — ten places our travelers can’t stop booking.":
@@ -388,6 +392,420 @@ Object.assign(translations.nl, {
   "B2B services": "B2B-diensten",
   "Supporting travel agents, corporate planners and partner networks with reliable route guidance, coordination and service standards.":
     "Ondersteuning voor reisagenten, zakelijke planners en partners met betrouwbare routebegeleiding, coördinatie en duidelijke servicenormen.",
+});
+
+Object.assign(translations.ar, {
+  "Choose a destination to start planning.": "اختر وجهة للبدء في التخطيط.",
+  "Destination": "الوجهة",
+  "Flight details": "تفاصيل الرحلة",
+  "Passenger details": "تفاصيل المسافر",
+  "Loading flight details...": "جارٍ تحميل تفاصيل الرحلة...",
+  "Loading flight booking details...": "جارٍ تحميل تفاصيل حجز الرحلة...",
+  "Your search": "بحثك",
+  "Sort by": "ترتيب حسب",
+  "Recommended": "موصى به",
+  "Lowest price": "أقل سعر",
+  "Searching live flight offers...": "جارٍ البحث عن عروض الطيران المباشرة...",
+  "No flights available for this route. Please try a different date or contact our team for alternative options.":
+    "لا توجد رحلات متاحة لهذا الطريق. جرب تاريخًا مختلفًا أو تواصل مع فريقنا للحصول على خيارات بديلة.",
+  "Edit search": "تعديل البحث",
+  "Selected flight": "الرحلة المختارة",
+  "Airline": "شركة الطيران",
+  "Travel date": "تاريخ الرحلة",
+  "Schedule": "الجدول",
+  "Stops": "التوقفات",
+  "Fare summary": "ملخص السعر",
+  "per traveller": "لكل مسافر",
+  "Selected service": "الخدمة المختارة",
+  "Traveller details": "تفاصيل المسافر",
+  "Travel dates and group size": "تواريخ السفر وحجم المجموعة",
+  "Tell us your dates, destination, number of travellers and preferences": "أخبرنا بتاريخ السفر والوجهة وعدد المسافرين والتفضيلات",
+  "How it works": "كيف تعمل الخدمة",
+  "Apply.": "التقديم.",
+  "Review.": "المراجعة.",
+  "Publish.": "النشر.",
+  "Confirm.": "التأكيد.",
+  "Business information": "معلومات العمل",
+  "Business name": "اسم الشركة",
+  "Contact email": "البريد الإلكتروني للتواصل",
+  "Service type": "نوع الخدمة",
+  "Main location": "الموقع الرئيسي",
+  "Tell us about your offer": "أخبرنا عن عرضك",
+  "Describe your service, capacity, typical price and preferred travellers": "صف خدمتك والسعة والسعر النموذجي والمسافرين المفضلين",
+  "Submit partner request": "إرسال طلب الشريك",
+  "Choose one": "اختر واحدًا",
+  "Accommodation": "الإقامة",
+  "Guided experiences": "تجارب موجهة",
+  "Tours": "الجولات",
+  "Transfers": "الانتقالات",
+  "Other travel service": "خدمة سفر أخرى",
+  "Partner offer": "عرض الشريك",
+  "For travellers": "للمسافرين",
+  "Add the right local details to your trip.": "أضف التفاصيل المحلية المناسبة لرحلتك.",
+  "Choose a service below or ask us to combine several into one route plan.": "اختر خدمة أدناه أو اطلب منا دمج عدة خدمات في خطة رحلة واحدة.",
+  "Become a partner": "كن شريكًا",
+  "Partner marketplace": "سوق الشركاء",
+  "Flight Right partner marketplace": "سوق شركاء فلايت رايت",
+  "Local services, ready for your journey.": "خدمات محلية جاهزة لرحلتك.",
+  "Browse accommodation, guided experiences and transfers from the Flight Right partner network. Every request is confirmed with the provider before payment.":
+    "استعرض الإقامات والتجارب والانتقالات من شبكة شركاء فلايت رايت. يتم تأكيد كل طلب مع مقدم الخدمة قبل الدفع.",
+  "Stay inspired": "استلهم",
+  "Thoughtful ideas, not a flood.": "أفكار مدروسة وليست رسائل مزعجة.",
+  "You’re signed up for new inspiration.": "أنت مسجل لتصلك أفكار جديدة.",
+  "Flight Right service": "خدمة فلايت رايت",
+  "Personal support": "دعم شخصي",
+  "Tell us what you need and we will prepare the next step.": "أخبرنا بما تحتاجه وسنجهز الخطوة التالية.",
+  "Request a plan": "اطلب خطة",
+  "Flight Right Travel & Tourism": "فلايت رايت للسفر والسياحة",
+  "Careers": "الوظائف",
+  "Press": "الإعلام",
+  "Message sent": "تم إرسال الرسالة",
+  "Return home": "العودة للرئيسية",
+  "Thanks for getting in touch.": "شكرًا لتواصلك معنا.",
+  "You’re all set.": "كل شيء جاهز.",
+  "Talk to us": "تحدث معنا",
+  "Hours: Monday to Saturday, 09:00–18:00 CET": "ساعات العمل: من الاثنين إلى السبت، 09:00–18:00 بتوقيت وسط أوروبا",
+  "Your enquiry is ready for the Flight Right team. We will respond using the contact details you provided.": "استفسارك جاهز لفريق فلايت رايت. سنرد عليك باستخدام تفاصيل التواصل التي قدمتها.",
+  "We are here to help you plan, confirm or adjust your trip. Reach out with travel questions, partner inquiries or general feedback and our team will get back to you quickly.":
+    "نحن هنا لمساعدتك في تخطيط رحلتك أو تأكيدها أو تعديلها. تواصل معنا بأسئلة السفر أو استفسارات الشراكة أو أي ملاحظات، وسيرد فريقنا بسرعة.",
+  "Talk to our team": "تحدث مع فريقنا",
+  "We could not send your message. Please try again.": "تعذّر إرسال رسالتك. يرجى المحاولة مرة أخرى.",
+  "We could not create the booking request.": "تعذّر إنشاء طلب الحجز.",
+  "Secure payment is not available yet.": "الدفع الآمن غير متاح بعد.",
+  "Continue to secure payment": "المتابعة إلى الدفع الآمن",
+  "Opening payment...": "جارٍ فتح الدفع...",
+  "View My Trips": "عرض رحلاتي",
+  "We have your details.": "لدينا تفاصيلك.",
+  "Your reference is": "رقمك المرجعي هو",
+  "Keep it with your email to look up the request later.": "احتفظ به مع بريدك الإلكتروني للبحث عن الطلب لاحقًا.",
+  "Lead traveller": "المسافر الرئيسي",
+  "Title": "العنوان",
+  "Gender": "الجنس",
+  "First name": "الاسم الأول",
+  "Last name": "اسم العائلة",
+  "Date of birth": "تاريخ الميلاد",
+  "Nationality": "الجنسية",
+  "Passport number": "رقم جواز السفر",
+  "Passport country": "بلد جواز السفر",
+  "Passport expiry date": "تاريخ انتهاء جواز السفر",
+  "Send booking request": "إرسال طلب الحجز",
+  "Your itinerary": "رحلتك",
+  "Estimated total": "الإجمالي المقدر",
+  "Hotels": "الفنادق",
+  "Holidays": "العطل",
+  "Tours": "الجولات",
+  "Transfers": "الانتقالات",
+  "Group trips": "رحلات جماعية",
+  "Honeymoon and private trips": "رحلات شهر العسل والرحلات الخاصة",
+  "Work and study abroad": "العمل والدراسة في الخارج",
+  "Flight Right service": "خدمة فلايت رايت",
+  "Start planning": "ابدأ التخطيط",
+  "Complete your request": "أكمل طلبك",
+  "Share the details below and Flight Right will prepare a live quote or booking option. No payment is collected until the itinerary and provider conditions are confirmed.":
+    "شارك التفاصيل أدناه وسيجهز فريق فلايت رايت عرضًا حاليًا أو خيار حجز. لا يتم جمع أي دفع حتى يتم تأكيد المسار وشروط المزود.",
+  "Request received": "تم استلام الطلب",
+  "Your Flight Right request is ready for review. Our team will confirm availability, pricing and the next payment step before anything is charged.":
+    "طلبك في فلايت رايت جاهز للمراجعة. سيؤكد فريقنا التوفر والسعر والخطوة التالية للدفع قبل أي خصم.",
+  "We have your request.": "لدينا طلبك.",
+  "We will contact you about": "سنتواصل معك بشأن",
+  "and confirm the live options before payment. Secure card checkout will be enabled when the payment key is added.":
+    "و نؤكد الخيارات الفعلية قبل الدفع. سيتم تفعيل الدفع الآمن عبر البطاقة عند إضافة مفتاح الدفع.",
+  "Back home": "العودة للرئيسية",
+  "Traveller details": "تفاصيل المسافر",
+  "Send request": "إرسال الطلب",
+  "Selected service": "الخدمة المختارة",
+  "Flight Right planning request": "طلب تخطيط فلايت رايت",
+  "We will confirm live availability, inclusions, cancellation terms and payment options before proceeding.":
+    "سنؤكد التوفر الفعلي والتضمينات وشروط الإلغاء وخيارات الدفع قبل المتابعة.",
+  "My Trips": "رحلاتي",
+  "Find a booking": "البحث عن حجز",
+  "Look up your trip": "ابحث عن رحلتك",
+  "Booking reference": "مرجع الحجز",
+  "Booking email": "بريد الحجز",
+  "Find trip": "البحث عن الرحلة",
+  "No booking found for those details.": "لم يتم العثور على حجز بهذه البيانات.",
+  "Terms of service": "شروط الاستخدام",
+  "Booking responsibilities": "مسؤوليات الحجز",
+  "Travelers are responsible for providing accurate personal, travel and payment information at the time of booking. We rely on this to confirm reservations and support any changes or requests.":
+    "يتحمل المسافرون مسؤولية تقديم معلومات شخصية وسفر ودفع دقيقة وقت الحجز. نعتمد عليها لتأكيد الحجوزات ودعم أي تغييرات أو طلبات.",
+  "Service availability": "توفر الخدمة",
+  "Flight Right provides information, booking support and travel coordination services. Availability and pricing are subject to change based on provider schedules, supplier policies and market conditions.":
+    "توفر فلايت رايت معلومات ودعمًا للحجز وتنسيق سفر. يخضع التوفر والسعر للتغيير بناءً على جداول المزودين وسياسات الموردين وظروف السوق.",
+  "Liability and support": "المسؤولية والدعم",
+  "We aim to provide accurate guidance and responsive support throughout the booking journey. For operational issues outside our control, the relevant airline, hotel or service provider remains responsible for their own policies.":
+    "نهدف إلى تقديم إرشادات دقيقة ودعم سريع طوال رحلة الحجز. في حال وجود مشاكل تشغيلية خارج سيطرتنا، يظل الناقل أو الفندق أو مزود الخدمة مسؤولًا عن سياساته الخاصة.",
+  "Privacy policy": "سياسة الخصوصية",
+  "What we collect": "ما الذي نجمعه",
+  "We may collect contact details, travel preferences, payment information, trip history and information from service providers necessary to complete your booking.":
+    "قد نجمع التفاصيل الشخصية وتفضيلات السفر ومعلومات الدفع وسجل الرحلات ومعلومات من مزودي الخدمة الضرورية لإكمال الحجز.",
+  "How we use it": "كيف نستخدمه",
+  "We use this information to manage bookings, tailor recommendations, provide customer support and improve the quality of our travel services.":
+    "نستخدم هذه المعلومات لإدارة الحجوزات وتخصيص التوصيات وتقديم الدعم ودعم جودة خدمات السفر.",
+  "Your choices": "خياراتك",
+  "You can request access to your personal data, correct inaccurate details or ask us to stop communication from us at any time by contacting our support team.":
+    "يمكنك طلب الوصول إلى بياناتك الشخصية أو تصحيحها أو طلب إيقاف التواصل معنا في أي وقت عبر التواصل مع فريق الدعم.",
+  "Apply now": "قدم الآن",
+  "Perks & culture": "المزايا والثقافة",
+  "Flexible work setup": "إعداد عمل مرن",
+  "Travel discounts": "خصومات السفر",
+  "Wellbeing support": "دعم الرعاية الصحية",
+  "Learning budget": "ميزانية التعلم",
+  "Inclusive culture": "ثقافة شاملة",
+  "Our story": "قصتنا",
+  "Built for people who want less friction and more feeling.": "مصمم للأشخاص الذين يريدون أقل احتكاك وأكثر إحساسًا.",
+  "What we value": "ما الذي نقدره",
+  "Thoughtful itineraries built around real traveler needs.": "خطط سفر مدروسة بناءً على احتياجات المسافرين الفعلية.",
+  "Transparent pricing with no hidden surprise extras.": "سعر شفاف بدون تكاليف خفية.",
+  "Human support before, during and after each trip.": "دعم بشري قبل الرحلة وأثناءها وبعدها.",
+  "A mix of practical logistics and memorable local moments.": "مزيج من التنظيم العملي وأوقات محلية لا تُنسى.",
+  "Latest updates": "آخر التحديثات",
+  "Media contact": "تواصل الإعلام",
+  "Press & partnerships": "الإعلام والشراكات",
+  "For interviews, destination stories and partnership requests, contact our media desk.":
+    "للمقابلات وقصص الوجهات وطلبات الشراكة، تواصل مع مكتب الإعلام.",
+  "Email: press@flightright.travel": "البريد الإلكتروني: press@flightright.travel",
+  "Phone: +31 6 29217807": "الهاتف: +31 6 29217807",
+  "Office: Amsterdam, Netherlands": "المكتب: أمستردام، هولندا",
+  "Flight Right expands regional city breaks across Egypt and Türkiye.": "توسّع فلايت رايت عطلات المدن الإقليمية في مصر وتركيا.",
+  "Travel experts highlight calmer, more curated holiday planning for families.": "يؤكد خبراء السفر على تخطيط العطل الأكثر هدوءًا واهتمامًا للعائلات.",
+  "Flight Right launches boutique route packages from Amsterdam and beyond.": "تطلق فلايت رايت باقات رحلات أنيقة من أمستردام وما وراءها.",
+  "Your journey, our passion.": "رحلتك، شغفنا.",
+  "Flight Right is a travel agency built around care, route clarity and practical advice for travelers moving between Europe, Egypt and Türkiye.":
+    "فلايت رايت وكالة سفر تعتمد على الرعاية ووضوح المسارات والنصيحة العملية للمسافرين بين أوروبا ومصر وتركيا.",
+  "We are building a team that combines hospitality, planning and practical problem-solving. If you care about detail, service and better travel experiences, you may be a fit.":
+    "نحن نبني فريقًا يجمع بين الضيافة والتخطيط وحل المشكلات العملية. إذا كنت تهتم بالتفاصيل والخدمة وتجارب السفر الأفضل، فقد تكون مناسبًا.",
+  "Senior Travel Consultant": "مستشار سفر كبير",
+  "Amsterdam · Hybrid": "أمستردام · هجين",
+  "Guide customers through complex itineraries and help them build smarter, smoother travel plans.": "إرشاد العملاء عبر خطط السفر المعقدة ومساعدتهم على بناء خطط سفر أكثر ذكاءً وسلاسة.",
+  "Destination Specialist": "أخصائي الوجهات",
+  "Cairo · On-site / Remote": "القاهرة · حضور/عن بعد",
+  "Build local travel knowledge across Egypt, Türkiye and Europe and shape premium recommendations.": "بناء معرفة محلية بالسفر عبر مصر وتركيا وأوروبا وصياغة توصيات فاخرة.",
+  "Partnership Manager": "مدير الشراكات",
+  "Remote · Europe & Middle East": "عن بعد · أوروبا والشرق الأوسط",
+  "Develop relationships with hotels, tour operators and transfer providers that improve traveler experiences.": "تطوير العلاقات مع الفنادق وشركات الجولة ومزودي النقل لتحسين تجارب المسافرين.",
+  "Perks & culture": "المزايا والثقافة",
+  "Business enquiries": "استفسارات الأعمال",
+  "Contact sales": "تواصل مع المبيعات",
+  "Amsterdam · Cairo · Istanbul": "أمستردام · القاهرة · إسطنبول",
+  "Can I change my flight after booking?": "هل يمكنني تغيير رحلتي بعد الحجز؟",
+  "Yes, depending on fare conditions and airline policy. Our support team can guide you through the available options and any extra costs.":
+    "نعم، حسب شروط السعر وسياسة الطائرة. يمكن لفريق الدعم إرشادك إلى الخيارات المتاحة وأي تكاليف إضافية.",
+  "Can I request help with a group flight?": "هل يمكنني طلب المساعدة في رحلة جماعية؟",
+  "Yes. Contact our team with your route, dates and group size. The API-ready booking flow will pass the request to our support team for review.":
+    "نعم. تواصل مع فريقنا مع تحديد الطريق والتواريخ وحجم المجموعة. سيتم تمرير الطلب إلى فريق الدعم للمراجعة.",
+  "How do I manage my itineraries?": "كيف أدار خطط سفري؟",
+  "Use the My Trips section to review upcoming journeys, saved ideas and important travel details in one place.":
+    "استخدم قسم رحلاتي لمراجعة الرحلات القادمة والأفكار المحفوظة والتفاصيل المهمة في مكان واحد.",
+  "Need guidance before or during a trip? We’ve gathered the most common travel questions and practical answers to make booking and planning easier.":
+    "هل تحتاج إلى إرشاد قبل الرحلة أو أثناءها؟ جمعنا أكثر الأسئلة شيوعًا والإجابات العملية لتسهيل الحجز والتخطيط.",
+  "We have your request.": "لدينا طلبك.",
+});
+
+Object.assign(translations.nl, {
+  "Choose a destination to start planning.": "Kies een bestemming om te beginnen met plannen.",
+  "Destination": "Bestemming",
+  "Flight details": "Vlugdetaill",
+  "Passenger details": "Passagiersgegevens",
+  "Loading flight details...": "Vluchtgegevens laden...",
+  "Loading flight booking details...": "Boekingsgegevens laden...",
+  "Your search": "Jouw zoekopdracht",
+  "Sort by": "Sorteren op",
+  "Recommended": "Aanbevolen",
+  "Lowest price": "Laagste prijs",
+  "Searching live flight offers...": "Live vluchten zoeken...",
+  "No flights available for this route. Please try a different date or contact our team for alternative options.":
+    "Geen vluchten beschikbaar voor deze route. Probeer een andere datum of neem contact met ons op voor alternatieve opties.",
+  "Edit search": "Zoekopdracht bewerken",
+  "Selected flight": "Geselecteerde vlucht",
+  "Airline": "Vliegtuigmaatschappij",
+  "Travel date": "Reisdatum",
+  "Schedule": "Schema",
+  "Stops": "Stops",
+  "Fare summary": "Prijsoverzicht",
+  "per traveller": "per reiziger",
+  "Selected service": "Geselecteerde dienst",
+  "Traveller details": "Reizigersdetails",
+  "Travel dates and group size": "Reisdatums en groepsgrootte",
+  "Tell us your dates, destination, number of travellers and preferences": "Vertel ons uw data, bestemming, aantal reizigers en voorkeuren",
+  "How it works": "Hoe het werkt",
+  "Apply.": "Solliciteer.",
+  "Review.": "Controle.",
+  "Publish.": "Publiceren.",
+  "Confirm.": "Bevestigen.",
+  "Business information": "Bedrijfsinformatie",
+  "Business name": "Bedrijfsnaam",
+  "Contact email": "Contact-e-mailadres",
+  "Service type": "Diensttype",
+  "Main location": "Hoofdlocatie",
+  "Tell us about your offer": "Vertel ons over uw aanbod",
+  "Describe your service, capacity, typical price and preferred travellers": "Beschrijf uw dienst, capaciteit, gebruikelijke prijs en gewenste reizigers",
+  "Submit partner request": "Partneraanvraag versturen",
+  "Choose one": "Kies een",
+  "Accommodation": "Accommodatie",
+  "Guided experiences": "Begeleide ervaringen",
+  "Tours": "Tours",
+  "Transfers": "Transfers",
+  "Other travel service": "Andere reisservice",
+  "Partner offer": "Partneraanbod",
+  "For travellers": "Voor reizigers",
+  "Add the right local details to your trip.": "Voeg de juiste lokale details toe aan uw reis.",
+  "Choose a service below or ask us to combine several into one route plan.": "Kies hieronder een dienst of laat ons meerdere combineren in één routeplan.",
+  "Become a partner": "Word partner",
+  "Partner marketplace": "Partnermarktplaats",
+  "Flight Right partner marketplace": "Flight Right partnermarktplaats",
+  "Local services, ready for your journey.": "Lokale diensten, klaar voor uw reis.",
+  "Browse accommodation, guided experiences and transfers from the Flight Right partner network. Every request is confirmed with the provider before payment.":
+    "Bekijk accommodaties, begeleide ervaringen en transfers uit het Flight Right-partnernetwerk. Elke aanvraag wordt vóór betaling met de aanbieder bevestigd.",
+  "Stay inspired": "Blijf geïnspireerd",
+  "Thoughtful ideas, not a flood.": "Doordachte ideeën, geen overvloed.",
+  "You’re signed up for new inspiration.": "Je bent aangemeld voor nieuwe inspiratie.",
+  "Flight Right service": "Flight Right dienst",
+  "Personal support": "Persoonlijke ondersteuning",
+  "Tell us what you need and we will prepare the next step.": "Vertel ons wat u nodig heeft en wij bereiden de volgende stap voor.",
+  "Request a plan": "Plan aanvragen",
+  "Flight Right Travel & Tourism": "Flight Right Reizen & Toerisme",
+  "Careers": "Vacatures",
+  "Press": "Pers",
+  "Message sent": "Bericht verzonden",
+  "Return home": "Terug naar home",
+  "Thanks for getting in touch.": "Bedankt voor je bericht.",
+  "Talk to us": "Praat met ons",
+  "Hours: Monday to Saturday, 09:00–18:00 CET": "Openingstijden: maandag tot en met zaterdag, 09:00–18:00 CET",
+  "Your enquiry is ready for the Flight Right team. We will respond using the contact details you provided.":
+    "Uw aanvraag is klaar voor het Flight Right-team. Wij reageren met de contactgegevens die u heeft opgegeven.",
+  "We are here to help you plan, confirm or adjust your trip. Reach out with travel questions, partner inquiries or general feedback and our team will get back to you quickly.":
+    "Wij helpen u graag bij het plannen, bevestigen of aanpassen van uw reis. Neem contact op voor reisvragen, partneraanvragen of feedback en ons team reageert snel.",
+  "We could not send your message. Please try again.": "Uw bericht kon niet worden verzonden. Probeer het opnieuw.",
+  "We could not create the booking request.": "De boekingsaanvraag kon niet worden aangemaakt.",
+  "Secure payment is not available yet.": "Veilig betalen is nog niet beschikbaar.",
+  "Complete the request form to continue. Your selected live offer will be rechecked before any payment step.":
+    "Vul het aanvraagformulier in om door te gaan. Uw geselecteerde live aanbieding wordt vóór elke betaalstap opnieuw gecontroleerd.",
+  "Your booking request has been sent to the Flight Right team. We will confirm availability and the next payment step.":
+    "Uw boekingsaanvraag is verzonden naar het Flight Right-team. Wij bevestigen de beschikbaarheid en de volgende betaalstap.",
+  "Continue to secure payment": "Doorgaan naar veilige betaling",
+  "Opening payment...": "Betaling openen...",
+  "View My Trips": "Mijn reizen bekijken",
+  "We have your details.": "We hebben uw gegevens.",
+  "Your reference is": "Uw referentie is",
+  "Keep it with your email to look up the request later.": "Bewaar dit met uw e-mail om het verzoek later op te zoeken.",
+  "Lead traveller": "Hoofdreiziger",
+  "Title": "Titel",
+  "Gender": "Geslacht",
+  "First name": "Voornaam",
+  "Last name": "Achternaam",
+  "Date of birth": "Geboortedatum",
+  "Nationality": "Nationaliteit",
+  "Passport number": "Paspoortnummer",
+  "Passport country": "Land van paspoort",
+  "Passport expiry date": "Vervaldatum paspoort",
+  "Send booking request": "Boekingsaanvraag versturen",
+  "Your itinerary": "Uw reisplan",
+  "Estimated total": "Geschatte totale prijs",
+  "Hotels": "Hotels",
+  "Holidays": "Vakanties",
+  "Tours": "Tours",
+  "Transfers": "Transfers",
+  "Group trips": "Groepsreizen",
+  "Honeymoon and private trips": "Huwelijksreis en privéreizen",
+  "Work and study abroad": "Werken en studeren in het buitenland",
+  "Start planning": "Begin met plannen",
+  "Complete your request": "Vul uw aanvraag in",
+  "Share the details below and Flight Right will prepare a live quote or booking option. No payment is collected until the itinerary and provider conditions are confirmed.":
+    "Deel hieronder uw gegevens, dan bereidt Flight Right een actuele offerte of boekingsoptie voor. Er wordt geen betaling gevraagd voordat het reisplan en de voorwaarden van de aanbieder zijn bevestigd.",
+  "Request received": "Aanvraag ontvangen",
+  "Your Flight Right request is ready for review. Our team will confirm availability, pricing and the next payment step before anything is charged.":
+    "Uw aanvraag bij Flight Right is klaar voor beoordeling. Ons team bevestigt de beschikbaarheid, prijs en de volgende betalingsstap voordat er iets wordt betaald.",
+  "We have your request.": "We hebben uw aanvraag.",
+  "We will contact you about": "Wij nemen contact met u op over",
+  "and confirm the live options before payment. Secure card checkout will be enabled when the payment key is added.":
+    "en bevestigen de actuele opties voordat u betaalt. Veilige kaartbetaling wordt ingeschakeld zodra de betaalcode is toegevoegd.",
+  "Back home": "Terug naar home",
+  "Traveller details": "Reizigersgegevens",
+  "Send request": "Aanvraag versturen",
+  "Selected service": "Geselecteerde dienst",
+  "Flight Right planning request": "Flight Right-plaanverzoek",
+  "We will confirm live availability, inclusions, cancellation terms and payment options before proceeding.":
+    "Wij bevestigen de actuele beschikbaarheid, inbegrepen diensten, annuleringsvoorwaarden en betalingsopties voordat u verder gaat.",
+  "My Trips": "Mijn reizen",
+  "Find a booking": "Zoek een boeking",
+  "Look up your trip": "Zoek uw reis op",
+  "Booking reference": "Boekingsreferentie",
+  "Booking email": "Boekings-e-mail",
+  "Find trip": "Reis zoeken",
+  "No booking found for those details.": "Geen boeking gevonden voor deze gegevens.",
+  "Terms of service": "Servicevoorwaarden",
+  "Booking responsibilities": "Verantwoordelijkheden bij boeking",
+  "Travelers are responsible for providing accurate personal, travel and payment information at the time of booking. We rely on this to confirm reservations and support any changes or requests.":
+    "Reizigers zijn verantwoordelijk voor het verstrekken van accurate persoonsgegevens, reis- en betaalgegevens bij de boeking. Wij gebruiken deze om reserveringen te bevestigen en wijzigingen of aanvragen te ondersteunen.",
+  "Service availability": "Beschikbaarheid van de dienst",
+  "Flight Right provides information, booking support and travel coordination services. Availability and pricing are subject to change based on provider schedules, supplier policies and market conditions.":
+    "Flight Right biedt informatie, boekingsondersteuning en reiscoördinatie. Beschikbaarheid en prijzen kunnen wijzigen op basis van planning, leveranciersvoorwaarden en marktomstandigheden.",
+  "Liability and support": "Aansprakelijkheid en ondersteuning",
+  "We aim to provide accurate guidance and responsive support throughout the booking journey. For operational issues outside our control, the relevant airline, hotel or service provider remains responsible for their own policies.":
+    "Wij streven naar accurate begeleiding en snelle ondersteuning tijdens de hele boeking. Bij operationele problemen buiten onze controle blijft de relevante luchtvaartmaatschappij, hotel of dienstverlener verantwoordelijk voor eigen voorwaarden.",
+  "Privacy policy": "Privacybeleid",
+  "What we collect": "Wat we verzamelen",
+  "We may collect contact details, travel preferences, payment information, trip history and information from service providers necessary to complete your booking.":
+    "We verzamelen contactgegevens, reisvoorkeuren, betalingsinformatie, reisgeschiedenis en informatie van serviceproviders die nodig is om uw boeking te voltooien.",
+  "How we use it": "Hoe we dit gebruiken",
+  "We use this information to manage bookings, tailor recommendations, provide customer support and improve the quality of our travel services.":
+    "We gebruiken deze informatie om boekingen te beheren, aanbevelingen af te stemmen, klantenservice te bieden en de kwaliteit van onze reizen te verbeteren.",
+  "Your choices": "Uw keuzes",
+  "You can request access to your personal data, correct inaccurate details or ask us to stop communication from us at any time by contacting our support team.":
+    "U kunt toegang vragen tot uw persoonsgegevens, onjuiste gegevens corrigeren of ons vragen om communicatie te stoppen door contact op te nemen met ons supportteam.",
+  "Apply now": "Nu solliciteren",
+  "Perks & culture": "Voordelen & cultuur",
+  "Flexible work setup": "Flexibele werkopzet",
+  "Travel discounts": "Reiskortingen",
+  "Wellbeing support": "Welzijnsondersteuning",
+  "Learning budget": "Leermiddelenbudget",
+  "Inclusive culture": "Inclusieve cultuur",
+  "Our story": "Ons verhaal",
+  "Built for people who want less friction and more feeling.": "Ontworpen voor mensen die minder gedoe en meer gevoel willen.",
+  "What we value": "Wat we waarderen",
+  "Thoughtful itineraries built around real traveler needs.": "Doordachte reisplannen gebaseerd op echte behoeften van reizigers.",
+  "Transparent pricing with no hidden surprise extras.": "Transparante prijzen zonder verborgen kosten.",
+  "Human support before, during and after each trip.": "Persoonlijke ondersteuning vóór, tijdens en na elke reis.",
+  "A mix of practical logistics and memorable local moments.": "Een mix van praktische organisatie en memorabele lokale momenten.",
+  "Latest updates": "Laatste updates",
+  "Media contact": "Media-contact",
+  "Press & partnerships": "Pers & partnerschappen",
+  "For interviews, destination stories and partnership requests, contact our media desk.":
+    "Voor interviews, bestemmingsverhalen en partneraanvragen, neem contact op met ons mediabureau.",
+  "Email: press@flightright.travel": "E-mail: press@flightright.travel",
+  "Phone: +31 6 29217807": "Telefoon: +31 6 29217807",
+  "Office: Amsterdam, Netherlands": "Kantoor: Amsterdam, Nederland",
+  "Flight Right expands regional city breaks across Egypt and Türkiye.": "Flight Right breidt regionale stedentrips uit over Egypte en Turkije.",
+  "Travel experts highlight calmer, more curated holiday planning for families.": "Reisexperts benadrukken rustiger en meer op maat gemaakt vakantieplanning voor gezinnen.",
+  "Flight Right launches boutique route packages from Amsterdam and beyond.": "Flight Right lanceert boutique routepakketten vanuit Amsterdam en verder.",
+  "Your journey, our passion.": "Jouw reis, onze passie.",
+  "Flight Right is a travel agency built around care, route clarity and practical advice for travelers moving between Europe, Egypt and Türkiye.":
+    "Flight Right is een reisbureau dat draait om zorg, duidelijke routes en praktische begeleiding voor reizigers tussen Europa, Egypte en Turkije.",
+  "We are building a team that combines hospitality, planning and practical problem-solving. If you care about detail, service and better travel experiences, you may be a fit.":
+    "Wij bouwen aan een team dat gastvrijheid, planning en praktisch probleemoplossend vermogen combineert. Als u om details, service en betere reizen geeft, past u misschien bij ons.",
+  "Senior Travel Consultant": "Senior reisconsulent",
+  "Amsterdam · Hybrid": "Amsterdam · Hybride",
+  "Guide customers through complex itineraries and help them build smarter, smoother travel plans.": "Begeleid klanten door complexe reisplannen en help hen slimmer, soepeler reizen te plannen.",
+  "Destination Specialist": "Bestemmingsspecialist",
+  "Cairo · On-site / Remote": "Cairo · On-site / Remote",
+  "Build local travel knowledge across Egypt, Türkiye and Europe and shape premium recommendations.": "Bouw lokale reiskennis op in Egypte, Turkije en Europa en ontwikkel premium aanbevelingen.",
+  "Partnership Manager": "Partnermanager",
+  "Remote · Europe & Middle East": "Remote · Europa & Midden-Oosten",
+  "Develop relationships with hotels, tour operators and transfer providers that improve traveler experiences.": "Ontwikkel relaties met hotels, touroperators en transferaanbieders die de reiservaring verbeteren.",
+  "Business enquiries": "Zakelijke vragen",
+  "Contact sales": "Neem contact op met verkoop",
+  "Amsterdam · Cairo · Istanbul": "Amsterdam · Cairo · Istanbul",
+  "Can I change my flight after booking?": "Kan ik mijn vlucht na de boeking wijzigen?",
+  "Yes, depending on fare conditions and airline policy. Our support team can guide you through the available options and any extra costs.":
+    "Ja, afhankelijk van de tariefvoorwaarden en de luchtvaartmaatschappij. Ons supportteam kan u begeleiden bij de beschikbare opties en eventuele extra kosten.",
+  "Can I request help with a group flight?": "Kan ik hulp krijgen bij een groepsvlucht?",
+  "Yes. Contact our team with your route, dates and group size. The API-ready booking flow will pass the request to our support team for review.":
+    "Ja. Neem contact op met ons team met uw route, data en groepsgrootte. De API-klare boeking stuurt het verzoek door naar ons supportteam voor beoordeling.",
+  "How do I manage my itineraries?": "Hoe beheer ik mijn reisplannen?",
+  "Use the My Trips section to review upcoming journeys, saved ideas and important travel details in one place.":
+    "Gebruik het gedeelte Mijn reizen om aankomende reizen, opgeslagen ideeën en belangrijke reisdetails op één plek te bekijken.",
+  "Need guidance before or during a trip? We’ve gathered the most common travel questions and practical answers to make booking and planning easier.":
+    "Heeft u begeleiding nodig vóór of tijdens een reis? We hebben de meest voorkomende vragen en praktische antwoorden verzameld om boeken en plannen eenvoudiger te maken.",
 });
 
 Object.assign(translations.ar, {
@@ -548,14 +966,14 @@ Object.assign(translations.ar, {
 });
 
 Object.assign(translations.ar, {
-  "Compare flight options with clear timings, stops and cabin details. This results view is ready to receive live Duffel offers when the API is connected.":
-    "قارن خيارات الرحلات مع مواعيد واضحة وعدد التوقفات وتفاصيل الدرجة. هذه الصفحة جاهزة لاستقبال عروض Duffel المباشرة عند ربط واجهة البرمجة.",
+  "Compare flight options with clear timings, stops and cabin details. This results view is ready to receive live partner offers when the booking connection is active.":
+    "قارن خيارات الرحلات مع مواعيد واضحة وعدد التوقفات وتفاصيل الدرجة. هذه الصفحة جاهزة لاستقبال العروض المباشرة عند تفعيل الاتصال الحجز.",
   to: "إلى",
 });
 
 Object.assign(translations.nl, {
-  "Compare flight options with clear timings, stops and cabin details. This results view is ready to receive live Duffel offers when the API is connected.":
-    "Vergelijk vluchtopties met duidelijke tijden, stops en cabinegegevens. Deze resultatenpagina is klaar voor actuele Duffel-aanbiedingen zodra de API is gekoppeld.",
+  "Compare flight options with clear timings, stops and cabin details. This results view is ready to receive live partner offers when the booking connection is active.":
+    "Vergelijk vluchtopties met duidelijke tijden, stops en cabinegegevens. Deze resultatenpagina is klaar voor live partneraanbiedingen zodra de boekingskoppeling actief is.",
   to: "naar",
 });
 
@@ -633,8 +1051,12 @@ Object.assign(translations.ar, {
   "Your booking request has been sent to the Flight Right team. We will confirm availability and the next step before anything is charged.":
     "تم إرسال طلب الحجز إلى فريق Flight Right. سنؤكد التوفر والخطوة التالية قبل تحصيل أي مبلغ.",
   "Passenger details": "بيانات المسافر",
-  "Complete the request form to continue. Payment is intentionally not collected in this prototype; the API integration will add secure Duffel payment handling here.":
-    "أكمل نموذج الطلب للمتابعة. لا يتم تحصيل الدفع في هذا النموذج التجريبي؛ وستضيف واجهة البرمجة معالجة دفع Duffel الآمنة هنا.",
+  "Complete the request form to continue. Payment is intentionally not collected in this prototype; the API integration will add secure payment handling here.":
+    "أكمل نموذج الطلب للمتابعة. لا يتم تحصيل الدفع في هذا النموذج التجريبي؛ وستضيف واجهة البرمجة معالجة الدفع الآمنة هنا.",
+  "Complete the request form to continue. Your selected live offer will be rechecked before any payment step.":
+    "أكمل نموذج الطلب للمتابعة. سيتم إعادة التحقق من العرض المباشر المختار قبل أي خطوة دفع.",
+  "Your booking request has been sent to the Flight Right team. We will confirm availability and the next payment step.":
+    "تم إرسال طلب الحجز إلى فريق Flight Right. سنؤكد التوفر والخطوة التالية للدفع.",
   "Lead traveller": "المسافر الرئيسي",
   "First name": "الاسم الأول",
   "Last name": "اسم العائلة",
@@ -1209,8 +1631,8 @@ Object.assign(translations.ar, {
     "الساعات: من الاثنين إلى السبت، 09:00–18:00 بتوقيت وسط أوروبا",
   Recommended: "موصى به",
   "Lowest price": "أقل سعر",
-  "Review the itinerary, fare and passenger details before sending your booking request. Final availability and price will come from Duffel once connected.":
-    "راجع البرنامج والسعر وبيانات المسافرين قبل إرسال طلب الحجز. سيأتي التوفر والسعر النهائيان من Duffel عند الاتصال.",
+  "Review the itinerary, fare and passenger details before sending your booking request. Final availability and price will be confirmed before payment is taken.":
+    "راجع البرنامج والسعر وبيانات المسافرين قبل إرسال طلب الحجز. سيتم تأكيد التوفر والسعر النهائي قبل استلام أي دفعة.",
   "We have your details.": "تم استلام بياناتك.",
   "Your reference is": "رقمك المرجعي هو",
   "Passenger details": "بيانات المسافر",
@@ -1284,8 +1706,8 @@ Object.assign(translations.nl, {
     "Openingstijden: maandag tot en met zaterdag, 09:00–18:00 CET",
   Recommended: "Aanbevolen",
   "Lowest price": "Laagste prijs",
-  "Review the itinerary, fare and passenger details before sending your booking request. Final availability and price will come from Duffel once connected.":
-    "Controleer het programma, tarief en de passagiersgegevens voordat je de aanvraag verstuurt. De definitieve beschikbaarheid en prijs komen van Duffel zodra de koppeling actief is.",
+  "Review the itinerary, fare and passenger details before sending your booking request. Final availability and price will be confirmed before payment is taken.":
+    "Controleer het programma, tarief en de passagiersgegevens voordat je de aanvraag verstuurt. De definitieve beschikbaarheid en prijs worden bevestigd voordat betaling wordt verwerkt.",
   "We have your details.": "We hebben je gegevens.",
   "Your reference is": "Je referentie is",
   "Booking reference": "Boekingsreferentie",
@@ -1622,8 +2044,8 @@ Object.assign(translations.ar, {
     "نعم. تواصل مع فريقنا واذكر مسارك وتواريخك وعدد المسافرين. سيرسل مسار الحجز الجاهز لواجهة البرمجة الطلب إلى فريق الدعم للمراجعة.",
   "Use the My Trips section to review upcoming journeys, saved ideas and important travel details in one place.":
     "استخدم قسم رحلاتي لمراجعة الرحلات القادمة والأفكار المحفوظة وتفاصيل السفر المهمة في مكان واحد.",
-  "Your requested flights and booking details will appear here once the live account and Duffel order connection is enabled.":
-    "ستظهر الرحلات المطلوبة وتفاصيل الحجز هنا عند تفعيل الحساب المباشر وربط طلب Duffel.",
+  "Your requested flights and booking details will appear here once the live account is enabled and your trip is confirmed.":
+    "ستظهر الرحلات المطلوبة وتفاصيل الحجز هنا عند تفعيل الحساب المباشر وتأكيد رحلتك.",
   "These terms explain how we provide travel services and what is expected of both travelers and the Flight Right team when planning a booking or itinerary.":
     "توضح هذه الشروط كيفية تقديم خدمات السفر وما هو متوقع من المسافرين وفريق Flight Right عند تخطيط الحجز أو البرنامج.",
   "For operational issues outside our control, the relevant airline, hotel or service provider remains responsible for their own policies.":
@@ -3974,7 +4396,7 @@ function FlightsPage() {
       cancelled = true;
     };
   }, [location]);
-  const availableOffers = liveOffers; // Only use real Duffel data, no mock fallback
+  const availableOffers = liveOffers;
   const offers =
     sort === "price"
       ? [...availableOffers].sort(
@@ -3987,7 +4409,7 @@ function FlightsPage() {
   return (
     <PageFrame
       title="Flights"
-      intro="Real-time flight search powered by Duffel. Compare airlines, prices, and schedules for your journey."
+      intro="Real-time flight search. Compare airlines, prices, and schedules for your journey."
     >
       <div className="rounded-[28px] border border-[#d7cdbb] bg-white p-6 shadow-sm">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
@@ -4027,7 +4449,7 @@ function FlightsPage() {
         )}
         {!loading && !searchError && offers.length === 0 && (
           <p role="alert" className="mt-6 text-sm font-semibold text-[#c75a3b]">
-            No flights available for this route. The Duffel API may not be configured or there are no flights available for the selected dates.
+            No flights available for this route. Please try a different date or contact our team for alternative options.
           </p>
         )}
         <div className="mt-6 space-y-4">
@@ -4291,7 +4713,7 @@ function FlightDetailsPage() {
     return (
       <PageFrame
         title="Flight details"
-        intro="Review the itinerary, fare and passenger details before sending your booking request. Final availability and price will come from Duffel once connected."
+        intro="Review the itinerary, fare and passenger details before sending your booking request. Final availability and price will be confirmed before payment is taken."
       >
         <div className="rounded-[28px] border border-[#d7cdbb] bg-white p-8 text-center shadow-sm">
           <p className="text-sm font-semibold text-[#173846]">
@@ -4314,7 +4736,7 @@ function FlightDetailsPage() {
   return (
     <PageFrame
       title="Flight details"
-      intro="Review the itinerary, fare and passenger details before sending your booking request. Final availability and price will come from Duffel once connected."
+      intro="Review the itinerary, fare and passenger details before sending your booking request. Final availability and price will be confirmed before payment is taken."
     >
       <div className="grid gap-8 lg:grid-cols-[1.1fr_.9fr]">
         <div className="rounded-[28px] border border-[#d7cdbb] bg-white p-8 shadow-sm">
@@ -5576,7 +5998,7 @@ function MyTripsPage() {
   return (
     <PageFrame
       title="My Trips"
-      intro="Your requested flights and booking details will appear here once the live account and Duffel order connection is enabled."
+      intro="Your requested flights and booking details will appear here once your trip has been confirmed."
     >
       <div className="rounded-[28px] border border-[#d7cdbb] bg-white p-8 shadow-sm">
         <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#c75a3b]">
