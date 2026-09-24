@@ -3301,7 +3301,17 @@ function Home() {
         </section>
 
         <section className="mx-auto max-w-[1320px] px-5 pb-20 lg:px-10">
-          <div className="rounded-[28px] bg-[#f0e6d6] p-8 lg:p-12">
+          <div className="relative rounded-[28px] overflow-hidden p-8 lg:p-12">
+            {/* Background Image */}
+            <div 
+              className="absolute inset-0 bg-cover bg-center"
+              style={{
+                backgroundImage: "url('/timrael-hot-air-balloons-4561267_1920.jpg')",
+              }}
+            />
+            <div className="absolute inset-0 bg-[#f0e6d6]/90" />
+            
+            <div className="relative">
             <div className="mb-8 flex items-center justify-between gap-4">
               <div>
                 <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#c75a3b]">
@@ -3368,6 +3378,7 @@ function Home() {
                 <Sparkles className="h-4 w-4 text-[#c75a3b]" />
                 <span>Thoughtful ideas, not a flood.</span>
               </div>
+            </div>
             </div>
           </div>
         </section>

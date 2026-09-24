@@ -1,10 +1,10 @@
 {
-  "buildCommand": "pnpm --filter @workspace/api-server build && pnpm --filter @workspace/travel-agency build && cp artifacts/api-server/dist/vercel.mjs api/handler.mjs",
+  "buildCommand": "pnpm --filter @workspace/api-server build && pnpm --filter @workspace/travel-agency build && cp artifacts/api-server/dist/vercel.mjs api/index.mjs",
   "outputDirectory": "artifacts/travel-agency/dist/public",
   "installCommand": "pnpm install --frozen-lockfile",
   "framework": null,
   "functions": {
-    "api/handler.mjs": {
+    "api/index.mjs": {
       "memory": 1024,
       "maxDuration": 10
     }

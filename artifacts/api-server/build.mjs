@@ -124,7 +124,7 @@ globalThis.__dirname = __bannerPath.dirname(globalThis.__filename);
 
   await copyFile(
     path.resolve(distDir, "vercel.mjs"),
-    path.resolve(artifactDir, "..", "..", "api", "handler.mjs"),
+    path.resolve(artifactDir, "..", "..", "api", "index.mjs"),
   );
 }
 
