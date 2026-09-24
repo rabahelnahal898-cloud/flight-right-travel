@@ -2926,23 +2926,23 @@ function Home() {
             </div>
             <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
               <div>
-                <h1 className="max-w-[720px] font-display text-[clamp(3.4rem,7vw,7rem)] leading-[0.82] tracking-[-0.075em] text-[#f7edcf]">
+                <h1 className="max-w-[720px] font-display text-[clamp(2.5rem,8vw,7rem)] leading-[0.9] tracking-[-0.075em] text-[#f7edcf]">
                   Where will
                   <br />
                   you go next?
                 </h1>
-                <p className="mt-5 max-w-[620px] text-lg leading-8 text-[#f7edcf]/75">
+                <p className="mt-4 max-w-[620px] text-base sm:text-lg leading-relaxed text-[#f7edcf]/75">
                   {brandProfile.description}
                 </p>
               </div>
 
-              <div className="rounded-[28px] border border-[#f7edcf]/20 bg-[#f7edcf]/8 p-3 shadow-2xl backdrop-blur-md">
+              <div className="rounded-[20px] sm:rounded-[28px] border border-[#f7edcf]/20 bg-[#f7edcf]/8 p-3 sm:p-4 shadow-2xl backdrop-blur-md">
                 <div className="grid grid-cols-1 gap-2 text-center text-[10px] font-bold uppercase tracking-[0.18em] text-[#f7edcf]/75">
                   {["Flights"].map((type) => (
                     <button
                       key={type}
                       onClick={() => setTravelType(type)}
-                      className="rounded-full bg-[#f6c94b] px-3 py-2 text-[#173846] transition-colors"
+                      className="rounded-full bg-[#f6c94b] px-4 py-2.5 text-[#173846] transition-colors"
                     >
                       {type}
                     </button>
@@ -2951,11 +2951,11 @@ function Home() {
 
                 <form
                   onSubmit={handleSearch}
-                  className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-5"
+                  className="mt-4 grid gap-2.5 sm:gap-3 sm:grid-cols-2 xl:grid-cols-5"
                 >
-                  <label className="rounded-2xl border border-[#f7edcf]/15 bg-white/5 p-3">
-                    <span className="mb-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[#f6c94b]">
-                      <Navigation className="h-3.5 w-3.5" /> From
+                  <label className="rounded-xl sm:rounded-2xl border border-[#f7edcf]/15 bg-white/5 p-2.5 sm:p-3">
+                    <span className="mb-1.5 sm:mb-2 flex items-center gap-2 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.18em] text-[#f6c94b]">
+                      <Navigation className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> From
                     </span>
                     <input
                       value={from}
@@ -2964,9 +2964,9 @@ function Home() {
                     />
                   </label>
 
-                  <label className="rounded-2xl border border-[#f7edcf]/15 bg-white/5 p-3">
-                    <span className="mb-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[#f6c94b]">
-                      <MapPin className="h-3.5 w-3.5" /> To
+                  <label className="rounded-xl sm:rounded-2xl border border-[#f7edcf]/15 bg-white/5 p-2.5 sm:p-3">
+                    <span className="mb-1.5 sm:mb-2 flex items-center gap-2 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.18em] text-[#f6c94b]">
+                      <MapPin className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> To
                     </span>
                     <input
                       value={to}
@@ -2976,9 +2976,9 @@ function Home() {
                     />
                   </label>
 
-                  <label className="rounded-2xl border border-[#f7edcf]/15 bg-white/5 p-3">
-                    <span className="mb-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[#f6c94b]">
-                      <CalendarDays className="h-3.5 w-3.5" /> Departure
+                  <label className="rounded-xl sm:rounded-2xl border border-[#f7edcf]/15 bg-white/5 p-2.5 sm:p-3">
+                    <span className="mb-1.5 sm:mb-2 flex items-center gap-2 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.18em] text-[#f6c94b]">
+                      <CalendarDays className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> Departure
                     </span>
                     <input
                       type="date"
@@ -2988,9 +2988,9 @@ function Home() {
                     />
                   </label>
 
-                  <label className="rounded-2xl border border-[#f7edcf]/15 bg-white/5 p-3">
-                    <span className="mb-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[#f6c94b]">
-                      <CalendarDays className="h-3.5 w-3.5" /> Return
+                  <label className="rounded-xl sm:rounded-2xl border border-[#f7edcf]/15 bg-white/5 p-2.5 sm:p-3">
+                    <span className="mb-1.5 sm:mb-2 flex items-center gap-2 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.18em] text-[#f6c94b]">
+                      <CalendarDays className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> Return
                     </span>
                     <input
                       type="date"
@@ -3000,7 +3000,7 @@ function Home() {
                     />
                   </label>
 
-                  <div className="relative rounded-2xl border border-[#f7edcf]/15 bg-white/5 p-3">
+                  <div className="relative rounded-xl sm:rounded-2xl border border-[#f7edcf]/15 bg-white/5 p-2.5 sm:p-3">
                     <button
                       type="button"
                       onClick={() => setShowPassengers((current) => !current)}
@@ -3049,15 +3049,15 @@ function Home() {
                   </div>
                 </form>
 
-                <div className="mt-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                  <div className="flex items-center gap-3 rounded-full border border-[#f7edcf]/15 bg-white/5 px-3 py-2 text-sm text-[#f7edcf]">
-                    <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#f6c94b]">
+                <div className="mt-3 sm:mt-4 flex flex-col gap-2.5 sm:gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex items-center gap-2 sm:gap-3 rounded-full border border-[#f7edcf]/15 bg-white/5 px-3 py-2 text-xs sm:text-sm text-[#f7edcf]">
+                    <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.18em] text-[#f6c94b] whitespace-nowrap">
                       Cabin
                     </span>
                     <select
                       value={cabin}
                       onChange={(event) => setCabin(event.target.value)}
-                      className="bg-transparent text-sm text-[#f7edcf] outline-none"
+                      className="bg-transparent text-xs sm:text-sm text-[#f7edcf] outline-none"
                     >
                       <option className="text-[#173846]">Economy</option>
                       <option className="text-[#173846]">
@@ -3081,7 +3081,7 @@ function Home() {
                         }),
                       )
                     }
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-[#f6c94b] px-6 py-3 text-sm font-bold text-[#173846] transition-transform hover:-translate-y-0.5"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-[#f6c94b] px-6 py-3 text-sm font-bold text-[#173846] transition-transform hover:-translate-y-0.5"
                   >
                     Search flights <ArrowRight className="h-4 w-4" />
                   </button>
