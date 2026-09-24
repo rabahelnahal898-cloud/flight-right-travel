@@ -2906,13 +2906,18 @@ function Home() {
         <section
           id="booking"
           className="relative overflow-hidden bg-[#173846] text-[#f7edcf]"
-          style={{
-            backgroundImage: "url('/jeshoots-com-airport-2373727_1920.jpg')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundBlendMode: "overlay",
-          }}
         >
+          {/* Video Background */}
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 h-full w-full object-cover"
+          >
+            <source src="/128409-741495446_medium.mp4" type="video/mp4" />
+          </video>
+          
           <div className="absolute inset-0 bg-[#173846]/75" />
           <div className="absolute inset-0 opacity-20 wander-grid" />
           <div className="relative mx-auto max-w-[1320px] px-5 pb-10 pt-14 lg:px-10 lg:pb-16 lg:pt-20">
