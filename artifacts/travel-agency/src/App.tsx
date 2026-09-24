@@ -3367,14 +3367,19 @@ function Home() {
       <footer
         id="contact"
         className="relative border-t border-[#d7cdbb] bg-[#f5efe5] overflow-hidden"
-        style={{
-          backgroundImage: "url('/hawksky-plane-3251802_1920.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center bottom",
-          backgroundBlendMode: "overlay",
-        }}
       >
-        <div className="absolute inset-0 bg-[#f5efe5]/70" />
+        {/* Video Background */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 h-full w-full object-cover"
+        >
+          <source src="/3473-170690984_medium.mp4" type="video/mp4" />
+        </video>
+        
+        <div className="absolute inset-0 bg-[#f5efe5]/50" />
         <div className="relative mx-auto max-w-[1320px] px-5 py-10 lg:px-10">
           <div className="grid gap-8 md:grid-cols-[1.5fr_.8fr_.8fr_.8fr]">
             <div>
