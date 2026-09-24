@@ -4409,7 +4409,7 @@ function BookingPage() {
   const [paymentError, setPaymentError] = useState("");
   const [paymentLoading, setPaymentLoading] = useState(false);
 
-  const startPayment = async () => {
+  const startPayment = async (bookingReference = bookingId) => {
     setPaymentLoading(true);
     setPaymentError("");
     try {
@@ -4417,7 +4417,7 @@ function BookingPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          bookingId,
+          bookingId: bookingReference,
           successUrl: `${window.location.origin}/my-trips?payment=success`,
           cancelUrl: `${window.location.origin}/book/${params?.id}?payment=cancelled`,
         }),
@@ -4543,6 +4543,7 @@ function BookingPage() {
             const result = (await response.json()) as { id: string };
             setBookingId(result.id);
             setSubmitted(true);
+            await startPayment(result.id);
           } catch (submissionError) {
             setError(
               submissionError instanceof Error
