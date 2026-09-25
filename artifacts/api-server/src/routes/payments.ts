@@ -16,13 +16,30 @@ router.post("/checkout", async (req, res, next) => {
     const stripe = stripeClient();
     if (!stripe) return res.status(503).json({ error: "Stripe is not configured", code: "STRIPE_NOT_CONFIGURED" });
     const input = PaymentCheckoutRequest.parse(req.body);
-    const booking = getBooking(input.bookingId);
+    const booking = await getBooking(input.bookingId);
     if (!booking) return res.status(404).json({ error: "Booking request not found", code: "BOOKING_NOT_FOUND" });
-    if (!config.duffelEnabled) return res.status(503).json({ error: "Duffel is required to price this payment", code: "DUFFEL_NOT_CONFIGURED" });
-    const offer = await getDuffelOffer(booking.offerId);
-    const amount = offer ? Math.round(Number(offer.total_amount) * 100) : 0;
-    const currency = offer?.total_currency?.toLowerCase();
-    if (!amount || !currency) return res.status(502).json({ error: "Unable to verify live offer price", code: "OFFER_PRICE_UNAVAILABLE" });
+
+    let amount = 0;
+    let currency = (booking.currency || "EUR").toLowerCase();
+
+    if (config.duffelEnabled) {
+      try {
+        const offer = await getDuffelOffer(booking.offerId);
+        amount = offer ? Math.round(Number(offer.total_amount) * 100) : 0;
+        const offerCurrency = offer?.total_currency?.toLowerCase();
+        if (offerCurrency) currency = offerCurrency;
+      } catch {
+        amount = 0;
+      }
+    }
+
+    if (!amount) {
+      const bookingAmount = Number.parseFloat(booking.amount);
+      if (!Number.isFinite(bookingAmount) || bookingAmount <= 0) {
+        return res.status(502).json({ error: "Unable to verify offer price for checkout", code: "OFFER_PRICE_UNAVAILABLE" });
+      }
+      amount = Math.round(bookingAmount * 100);
+    }
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
