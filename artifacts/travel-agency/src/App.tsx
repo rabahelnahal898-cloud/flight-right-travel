@@ -4218,7 +4218,7 @@ function PressPage() {
 function ContactPage() {
   const [location, setLocation] = useLocation();
   const subjectFromUrl =
-    new URLSearchParams(location.split("?")[1] || "").get("subject") || "";
+    new URLSearchParams(window.location.search).get("subject") || "";
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -4270,21 +4270,17 @@ function ContactPage() {
 
         <div className="rounded-[28px] border border-[#d7cdbb] bg-white p-8 shadow-sm">
           <form
+            action="https://api.web3forms.com/submit"
+            method="POST"
             onSubmit={async (event) => {
               event.preventDefault();
               setSubmitting(true);
               setError("");
               const form = new FormData(event.currentTarget);
               try {
-                const response = await fetch(`${apiBaseUrl}/api/contact`, {
+                const response = await fetch("https://api.web3forms.com/submit", {
                   method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    name: form.get("name"),
-                    email: form.get("email"),
-                    subject: form.get("subject"),
-                    message: form.get("message"),
-                  }),
+                  body: form,
                 });
                 if (!response.ok)
                   throw new Error(
@@ -4303,6 +4299,9 @@ function ContactPage() {
             }}
             className="space-y-5"
           >
+            {/* Web3Forms - 100% FREE, sends to info@flightrighttravel.international */}
+            <input type="hidden" name="access_key" value="c00f0dfa-f24d-4f05-aeb7-81fedc133af4" />
+            <input type="hidden" name="from_name" value="Flight Right Contact Form" />
             <div className="grid gap-5 md:grid-cols-2">
               <label className="text-sm font-medium text-[#173846]">
                 Full name
@@ -4366,7 +4365,7 @@ function ContactPage() {
 function FlightsPage() {
   const [location, setLocation] = useLocation();
   const initialSearch = buildFlightSearch(
-    new URLSearchParams(location.split("?")[1] || ""),
+    new URLSearchParams(window.location.search),
   );
   const [search, setSearch] = useState(initialSearch);
   const [liveOffers, setLiveOffers] = useState<FlightOffer[]>([]);
@@ -4697,7 +4696,7 @@ function FlightDetailsPage() {
   const [, params] = useRoute("/flight-offers/:id");
   const [location] = useLocation();
   const search = buildFlightSearch(
-    new URLSearchParams(location.split("?")[1] || ""),
+    new URLSearchParams(window.location.search),
   );
   const [liveOffer, setLiveOffer] = useState<FlightOffer | null>(null);
   const offer = liveOffer; // Only use real Duffel offers
@@ -4813,7 +4812,7 @@ function BookingPage() {
   const [, params] = useRoute("/book/:id");
   const [location] = useLocation();
   const search = buildFlightSearch(
-    new URLSearchParams(location.split("?")[1] || ""),
+    new URLSearchParams(window.location.search),
   );
   const [liveOffer, setLiveOffer] = useState<FlightOffer | null>(null);
   const offer = liveOffer; // Only use real Duffel offers
@@ -4880,22 +4879,22 @@ function BookingPage() {
   if (submitted) {
     return (
       <PageFrame
-        title="Request received"
-        intro="Your booking request has been sent to the Flight Right team. We will confirm availability and the next payment step."
+        title="Preparing secure checkout"
+        intro="Your details are being checked and forwarded to Stripe. We will only complete the booking after payment is successful."
       >
         <div className="rounded-[28px] border border-[#d7cdbb] bg-white p-8 shadow-sm">
           <Check className="h-10 w-10 text-[#c75a3b]" />
           <h2 className="mt-5 font-display text-5xl leading-none tracking-[-0.04em] text-[#173846]">
-            We have your details.
+            Redirecting to payment
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-7 text-[#617277]">
-            Your reference is <strong>{bookingId}</strong>. Keep it with your
-            email to look up the request later.
+            Please wait while we open the secure checkout page. Your booking is
+            created only after the payment is confirmed.
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
             <button
               type="button"
-              onClick={startPayment}
+              onClick={() => startPayment(bookingId)}
               disabled={paymentLoading}
               className="rounded-full bg-[#c75a3b] px-6 py-3 text-sm font-bold text-[#fff4e3] disabled:opacity-60"
             >
@@ -4926,7 +4925,7 @@ function BookingPage() {
   return (
     <PageFrame
       title="Passenger details"
-      intro="Complete the request form to continue. Your selected live offer will be rechecked before any payment step."
+      intro="Complete your details and continue to secure payment. The booking is only created after payment is confirmed."
     >
       <form
         onSubmit={async (event) => {
@@ -4948,29 +4947,47 @@ function BookingPage() {
           };
 
           try {
-            const response = await fetch(`${apiBaseUrl}/api/bookings`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                offerId: offer.id,
-                ...passenger,
-                amount: Number.parseFloat(offer.price.replace(/[^\d.]/g, "")).toFixed(2).toString(),
-                currency: offer.currency || "EUR",
-                passengers: [passenger],
-                search,
-              }),
-            });
-            if (!response.ok)
-              throw new Error("We could not create the booking request.");
-            const result = (await response.json()) as { id: string };
-            setBookingId(result.id);
+            const amountValue = Number.parseFloat(
+              offer.price.replace(/[^\d.]/g, ""),
+            );
+            const paymentResponse = await fetch(
+              `${apiBaseUrl}/api/payments/checkout`,
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  offerId: offer.id,
+                  ...passenger,
+                  amount: amountValue.toFixed(2).toString(),
+                  currency: offer.currency || "EUR",
+                  passengers: [passenger],
+                  search,
+                  successUrl: `${window.location.origin}/my-trips?payment=success`,
+                  cancelUrl: `${window.location.origin}/book/${params?.id}?payment=cancelled`,
+                }),
+              },
+            );
+
+            const paymentResult = (await paymentResponse.json()) as {
+              checkoutUrl?: string;
+              error?: string;
+            };
+
+            if (!paymentResponse.ok || !paymentResult.checkoutUrl) {
+              throw new Error(
+                paymentResult.error ||
+                  "We could not create the secure payment session.",
+              );
+            }
+
+            setBookingId(paymentResult.checkoutUrl.includes("session_id=") ? "checkout" : "checkout");
             setSubmitted(true);
-            await startPayment(result.id);
+            window.location.assign(paymentResult.checkoutUrl);
           } catch (submissionError) {
             setError(
               submissionError instanceof Error
                 ? submissionError.message
-                : "We could not create the booking request.",
+                : "We could not continue to secure payment.",
             );
           }
         }}
@@ -5102,7 +5119,7 @@ function BookingPage() {
             type="submit"
             className="mt-7 inline-flex items-center gap-2 rounded-full bg-[#c75a3b] px-6 py-3 text-sm font-bold text-[#fff4e3]"
           >
-            Send booking request <ArrowRight className="h-4 w-4" />
+            Continue to secure payment <ArrowRight className="h-4 w-4" />
           </button>
         </div>
         <div className="rounded-[28px] bg-[#173846] p-8 text-[#f7edcf] shadow-sm">
@@ -5506,7 +5523,7 @@ function ServiceCategoryPage() {
 
 function ServiceCheckoutPage() {
   const [location] = useLocation();
-  const params = new URLSearchParams(location.split("?")[1] || "");
+  const params = new URLSearchParams(window.location.search);
   const service = params.get("service") || "travel service";
   const item = params.get("item") || "Custom trip request";
   const [submitted, setSubmitted] = useState(false);
@@ -5545,22 +5562,16 @@ function ServiceCheckoutPage() {
       intro="Share the details below and Flight Right will prepare a live quote or booking option. No payment is collected until the itinerary and provider conditions are confirmed."
     >
       <form
+        action="https://api.web3forms.com/submit"
+        method="POST"
         onSubmit={async (event) => {
           event.preventDefault();
           setError("");
           const form = new FormData(event.currentTarget);
           try {
-            const response = await fetch(`${apiBaseUrl}/api/service-requests`, {
+            const response = await fetch("https://api.web3forms.com/submit", {
               method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                service,
-                item,
-                name: form.get("name"),
-                email: form.get("email"),
-                phone: form.get("phone"),
-                details: form.get("details"),
-              }),
+              body: form,
             });
             if (!response.ok)
               throw new Error(
@@ -5577,6 +5588,13 @@ function ServiceCheckoutPage() {
         }}
         className="grid gap-8 lg:grid-cols-[1fr_.75fr]"
       >
+        {/* Web3Forms - 100% FREE, sends to info@flightrighttravel.international */}
+        <input type="hidden" name="access_key" value="c00f0dfa-f24d-4f05-aeb7-81fedc133af4" />
+        <input type="hidden" name="subject" value={`New Service Request: ${item}`} />
+        <input type="hidden" name="from_name" value="Flight Right Website" />
+        <input type="hidden" name="redirect" value={window.location.href} />
+        <input type="hidden" name="service" value={service} />
+        <input type="hidden" name="item" value={item} />
         <div className="rounded-[28px] border border-[#d7cdbb] bg-white p-8 shadow-sm">
           <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#c75a3b]">
             Traveller details
