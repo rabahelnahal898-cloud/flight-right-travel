@@ -4789,7 +4789,8 @@ function FlightDetailsPage() {
               {search.passengers} traveller{search.passengers === 1 ? "" : "s"}
             </span>
             <strong className="font-mono-custom text-4xl">
-              €{Number(offer.price.slice(1)) * search.passengers}
+              {offer.currency === "EUR" || !offer.currency ? "€" : `${offer.currency} `}
+              {Number.parseFloat(offer.price.replace(/[^\d.]/g, "")).toFixed(2)}
             </strong>
           </div>
           <p className="mt-4 text-sm leading-6 text-[#f7edcf]/70">
@@ -5031,10 +5032,12 @@ function BookingPage() {
           }
 
           try {
-            const unitAmount = Number.parseFloat(
+            const offerTotalAmount = Number.parseFloat(
               offer.price.replace(/[^\d.]/g, ""),
             );
-            const totalAmount = unitAmount * passengerCount;
+            const totalAmount = Number.isFinite(offerTotalAmount)
+              ? offerTotalAmount
+              : 0;
             const paymentResponse = await fetch(
               `${apiBaseUrl}/api/payments/checkout`,
               {
@@ -5237,10 +5240,7 @@ function BookingPage() {
               {offer.currency === "EUR" || !offer.currency
                 ? "€"
                 : `${offer.currency} `}
-              {(
-                Number.parseFloat(offer.price.replace(/[^\d.]/g, "")) *
-                search.passengers
-              ).toFixed(2)}
+              {Number.parseFloat(offer.price.replace(/[^\d.]/g, "")).toFixed(2)}
             </strong>
           </div>
         </div>
