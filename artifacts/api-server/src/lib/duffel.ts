@@ -6,6 +6,7 @@ type DuffelOffer = {
   id: string;
   total_amount: string;
   total_currency: string;
+  passengers?: Array<{ id: string }>;
   owner?: { name?: string; iata_code?: string };
   slices?: Array<{ duration?: string; segments?: Array<{ departing_at: string; arriving_at: string; marketing_carrier?: { iata_code?: string }; marketing_carrier_flight_number?: string }> }>;
 };
@@ -85,17 +86,28 @@ export async function createDuffelOrder(offerId: string, bookingInput: BookingIn
     throw new Error("Duffel API token not configured");
   }
 
+  const offer = await getDuffelOffer(offerId);
+  const offerPassengers = offer?.passengers;
+  if (
+    !offerPassengers ||
+    offerPassengers.length !== bookingInput.passengers.length ||
+    offerPassengers.some((passenger) => !passenger.id)
+  ) {
+    throw new Error("Passenger details do not match the selected flight offer");
+  }
+
   const duffel = new Duffel({ token: config.duffelToken });
 
   // Transform BookingInput passengers to Duffel format
-  const passengers = bookingInput.passengers.map((p) => ({
+  const passengers = bookingInput.passengers.map((p, index) => ({
+    id: offerPassengers[index].id,
     given_name: p.firstName,
     family_name: p.lastName,
     born_on: p.dateOfBirth,
     gender: p.gender.toLowerCase() as "m" | "f",
     title: p.title.toLowerCase() as "mr" | "ms" | "mrs" | "miss" | "dr",
-    phone_number: p.phone,
-    email: p.email,
+    phone_number: p.phone || bookingInput.phone,
+    email: p.email || bookingInput.email,
   }));
 
   // Create order with instant payment type (using balance)
@@ -119,7 +131,9 @@ export async function createDuffelOrder(offerId: string, bookingInput: BookingIn
     bookingReference: order.data.booking_reference,
     totalAmount: order.data.total_amount,
     totalCurrency: order.data.total_currency,
-    paymentStatus: order.data.payment_status.status,
+    paymentStatus: order.data.payment_status.awaiting_payment
+      ? "awaiting_payment"
+      : "paid",
     passengers: order.data.passengers,
     slices: order.data.slices,
   };

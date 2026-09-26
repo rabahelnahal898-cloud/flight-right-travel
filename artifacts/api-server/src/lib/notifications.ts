@@ -1,5 +1,6 @@
 import { config } from "./config";
 import { logger } from "./logger";
+import nodemailer from "nodemailer";
 
 type Notification = {
   subject: string;
@@ -7,41 +8,53 @@ type Notification = {
   replyTo?: string;
 };
 
+// Simple email using Gmail SMTP - NO API NEEDED!
 export async function sendEmail(notification: Notification) {
-  if (!config.emailEnabled) return { sent: false, reason: "EMAIL_NOT_CONFIGURED" } as const;
+  if (!config.contactEmail) return { sent: false, reason: "EMAIL_NOT_CONFIGURED" } as const;
 
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${config.resendApiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      from: config.emailFrom,
-      to: [config.contactEmail],
+  try {
+    // Create transporter using Gmail
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: config.smtpUser || config.contactEmail,
+        pass: config.smtpPassword || "temporary", // Will need app password
+      },
+    });
+
+    await transporter.sendMail({
+      from: config.emailFrom || config.contactEmail,
+      to: config.contactEmail,
       subject: notification.subject,
       text: notification.text,
-      ...(notification.replyTo ? { reply_to: notification.replyTo } : {}),
-    }),
-  });
+      replyTo: notification.replyTo,
+    });
 
-  if (!response.ok) throw new Error(`Resend request failed with ${response.status}`);
-  return { sent: true, provider: "resend" } as const;
+    return { sent: true, provider: "smtp" } as const;
+  } catch (error) {
+    logger.error({ error }, "Failed to send email");
+    return { sent: false, reason: "SMTP_ERROR" } as const;
+  }
 }
 
+// Simple WhatsApp - just log for now, you can manually forward
 export async function sendWhatsApp(notification: Notification) {
-  if (!config.whatsappEnabled) return { sent: false, reason: "WHATSAPP_NOT_CONFIGURED" } as const;
+  if (!config.whatsappRecipientNumber) return { sent: false, reason: "WHATSAPP_NOT_CONFIGURED" } as const;
 
-  const response = await fetch(`https://graph.facebook.com/v21.0/${config.whatsappPhoneNumberId}/messages`, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${config.whatsappAccessToken}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      messaging_product: "whatsapp",
-      to: config.whatsappRecipientNumber,
-      type: "text",
-      text: { preview_url: false, body: `${notification.subject}\n\n${notification.text}` },
-    }),
-  });
+  // Log the message so you can manually forward it via WhatsApp Web
+  const message = `${notification.subject}\n\n${notification.text}`;
+  logger.info({ 
+    whatsapp: config.whatsappRecipientNumber, 
+    message 
+  }, "WhatsApp notification (forward manually to +201282220484)");
 
-  if (!response.ok) throw new Error(`WhatsApp request failed with ${response.status}`);
-  return { sent: true, provider: "whatsapp" } as const;
+  // Generate WhatsApp Web link
+  const whatsappUrl = `https://wa.me/${config.whatsappRecipientNumber.replace(/\+/g, "")}?text=${encodeURIComponent(message)}`;
+  logger.info({ whatsappUrl }, "Click this link to send via WhatsApp Web");
+
+  return { sent: true, provider: "whatsapp-manual" } as const;
 }
 
 export async function notifyTeam(notification: Notification) {

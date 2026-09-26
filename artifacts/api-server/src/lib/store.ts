@@ -1,4 +1,4 @@
-import type { PrismaClient as PrismaClientType } from "@prisma/client";
+import { PrismaClient, type PrismaClient as PrismaClientType } from "@prisma/client";
 import type { BookingInput, PartnerApplicationInput, ServiceRequestInput } from "@workspace/api-zod";
 
 let prisma: PrismaClientType | null = null;
@@ -9,7 +9,6 @@ async function getPrismaClient(): Promise<PrismaClientType> {
   }
 
   if (!prisma) {
-    const { PrismaClient } = await import("@prisma/client");
     prisma = new PrismaClient();
   }
 
@@ -19,16 +18,13 @@ async function getPrismaClient(): Promise<PrismaClientType> {
 export type BookingRecord = BookingInput & {
   id: string;
   createdAt: string;
-  status: "request_received" | "confirmed" | "failed";
+  status: "pending_payment" | "payment_processing" | "request_received" | "confirmed" | "failed";
   duffelOrderId?: string;
   bookingReference?: string;
   paymentStatus?: string;
 };
 
-export async function createBooking(
-  input: BookingInput,
-  duffelData?: { orderId: string; bookingReference: string; paymentStatus: string }
-): Promise<BookingRecord> {
+export async function createPendingBooking(input: BookingInput): Promise<BookingRecord> {
   const client = await getPrismaClient();
   const booking = await client.booking.create({
     data: {
@@ -44,10 +40,8 @@ export async function createBooking(
       title: input.title,
       passengers: input.passengers || [],
       search: input.search,
-      status: duffelData ? "confirmed" : "request_received",
-      duffelOrderId: duffelData?.orderId,
-      bookingReference: duffelData?.bookingReference,
-      paymentStatus: duffelData?.paymentStatus,
+      status: "pending_payment",
+      paymentStatus: "unpaid",
     },
   });
 
@@ -55,11 +49,49 @@ export async function createBooking(
     ...input,
     id: booking.id,
     createdAt: booking.createdAt.toISOString(),
-    status: booking.status as "request_received" | "confirmed" | "failed",
+    status: booking.status as BookingRecord["status"],
     duffelOrderId: booking.duffelOrderId || undefined,
     bookingReference: booking.bookingReference || undefined,
     paymentStatus: booking.paymentStatus || undefined,
   };
+}
+
+export async function claimBookingForFulfillment(id: string) {
+  const client = await getPrismaClient();
+  const result = await client.booking.updateMany({
+    where: { id, status: "pending_payment" },
+    data: { status: "payment_processing", paymentStatus: "paid" },
+  });
+  return result.count === 1;
+}
+
+export async function confirmBooking(
+  id: string,
+  duffelData: { orderId: string; bookingReference: string; paymentStatus: string },
+) {
+  const client = await getPrismaClient();
+  await client.booking.update({
+    where: { id },
+    data: {
+      status: "confirmed",
+      duffelOrderId: duffelData.orderId,
+      bookingReference: duffelData.bookingReference,
+      paymentStatus: duffelData.paymentStatus,
+    },
+  });
+}
+
+export async function failBooking(id: string, paymentStatus: string) {
+  const client = await getPrismaClient();
+  await client.booking.update({
+    where: { id },
+    data: { status: "failed", paymentStatus },
+  });
+}
+
+export async function deletePendingBooking(id: string) {
+  const client = await getPrismaClient();
+  await client.booking.deleteMany({ where: { id, status: "pending_payment" } });
 }
 
 export async function findBookings(reference: string, email: string) {
@@ -77,7 +109,7 @@ export async function findBookings(reference: string, email: string) {
   return bookings.map((booking) => ({
     id: booking.id,
     createdAt: booking.createdAt.toISOString(),
-    status: booking.status as "request_received" | "confirmed" | "failed",
+    status: booking.status as BookingRecord["status"],
     offerId: booking.offerId,
     amount: booking.amount,
     currency: booking.currency,
@@ -125,10 +157,13 @@ export async function getBooking(id: string) {
 
   if (!booking) return null;
 
+  const passengers = booking.passengers as BookingInput["passengers"] | null;
+  const leadPassenger = passengers?.[0];
+
   return {
     id: booking.id,
     createdAt: booking.createdAt.toISOString(),
-    status: booking.status as "request_received" | "confirmed" | "failed",
+    status: booking.status as BookingRecord["status"],
     offerId: booking.offerId,
     amount: booking.amount,
     currency: booking.currency,
@@ -139,7 +174,11 @@ export async function getBooking(id: string) {
     dateOfBirth: booking.dateOfBirth,
     gender: booking.gender,
     title: booking.title,
-    passengers: booking.passengers as any,
+    nationality: leadPassenger?.nationality || "",
+    passportNumber: leadPassenger?.passportNumber || "",
+    passportCountry: leadPassenger?.passportCountry || "",
+    passportExpiry: leadPassenger?.passportExpiry || "",
+    passengers: passengers || [],
     search: booking.search as any,
     duffelOrderId: booking.duffelOrderId || undefined,
     bookingReference: booking.bookingReference || undefined,

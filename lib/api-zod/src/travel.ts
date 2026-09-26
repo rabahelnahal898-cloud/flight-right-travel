@@ -64,7 +64,7 @@ export const BookingRequest = z.object({
 
 export const BookingResponse = z.object({
   id: z.string(),
-  status: z.enum(["request_received", "confirmed", "failed"]),
+  status: z.enum(["pending_payment", "payment_processing", "request_received", "confirmed", "failed"]),
   provider: z.enum(["duffel", "demo"]),
   message: z.string(),
 });
@@ -102,8 +102,7 @@ export const PartnerApplication = z.object({
   details: z.string().trim().min(1).max(4000),
 });
 
-export const PaymentCheckoutRequest = z.object({
-  bookingId: z.string().trim().min(3).max(80),
+export const PaymentCheckoutRequest = BookingRequest.extend({
   successUrl: z.string().url(),
   cancelUrl: z.string().url(),
 });

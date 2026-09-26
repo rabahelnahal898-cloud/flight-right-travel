@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pnpm --filter @workspace/api-server build && pnpm --filter @workspace/travel-agency build && cp artifacts/api-server/dist/vercel.mjs api/index.mjs",
+  "buildCommand": "pnpm --filter @workspace/api-server build && pnpm --filter @workspace/travel-agency build",
   "outputDirectory": "artifacts/travel-agency/dist/public",
   "installCommand": "pnpm install --frozen-lockfile",
   "framework": null,
