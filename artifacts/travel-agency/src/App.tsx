@@ -4829,6 +4829,9 @@ function BookingPage() {
   const [error, setError] = useState("");
   const [paymentError, setPaymentError] = useState("");
   const [paymentLoading, setPaymentLoading] = useState(false);
+  const passengerCount = Math.max(1, Number(search.passengers) || 1);
+  const fieldName = (index: number, field: string) =>
+    `traveller-${index}-${field}`;
 
   const startPayment = async (bookingReference = bookingId) => {
     setPaymentLoading(true);
@@ -4932,24 +4935,106 @@ function BookingPage() {
           event.preventDefault();
           setError("");
           const form = new FormData(event.currentTarget);
-          const passenger = {
-            firstName: String(form.get("firstName") || "").trim(),
-            lastName: String(form.get("lastName") || "").trim(),
-            email: String(form.get("email") || "").trim(),
-            phone: String(form.get("phone") || "").trim(),
-            title: String(form.get("title") || "Mr"),
-            gender: String(form.get("gender") || "Male"),
-            dateOfBirth: String(form.get("dateOfBirth") || "").trim(),
-            nationality: String(form.get("nationality") || "").trim(),
-            passportNumber: String(form.get("passportNumber") || "").trim(),
-            passportCountry: String(form.get("passportCountry") || "").trim(),
-            passportExpiry: String(form.get("passportExpiry") || "").trim(),
+          const leadPassenger = {
+            firstName: String(form.get(fieldName(0, "firstName")) || "").trim(),
+            lastName: String(form.get(fieldName(0, "lastName")) || "").trim(),
+            email: String(form.get(fieldName(0, "email")) || "").trim(),
+            phone: String(form.get(fieldName(0, "phone")) || "").trim(),
+            title: String(form.get(fieldName(0, "title")) || "Mr"),
+            gender: String(form.get(fieldName(0, "gender")) || "Male"),
+            dateOfBirth: String(form.get(fieldName(0, "dateOfBirth")) || "").trim(),
+            nationality: String(form.get(fieldName(0, "nationality")) || "").trim(),
+            passportNumber: String(form.get(fieldName(0, "passportNumber")) || "").trim(),
+            passportCountry: String(form.get(fieldName(0, "passportCountry")) || "").trim(),
+            passportExpiry: String(form.get(fieldName(0, "passportExpiry")) || "").trim(),
           };
 
+          const passengers = Array.from({ length: passengerCount }, (_, index) => {
+            const passenger = {
+              firstName: String(
+                form.get(fieldName(index, "firstName")) || "",
+              ).trim(),
+              lastName: String(
+                form.get(fieldName(index, "lastName")) || "",
+              ).trim(),
+              email: String(form.get(fieldName(index, "email")) || "").trim(),
+              phone: String(form.get(fieldName(index, "phone")) || "").trim(),
+              title: String(
+                form.get(fieldName(index, "title")) || "Mr",
+              ),
+              gender: String(
+                form.get(fieldName(index, "gender")) || "Male",
+              ),
+              dateOfBirth: String(
+                form.get(fieldName(index, "dateOfBirth")) || "",
+              ).trim(),
+              nationality: String(
+                form.get(fieldName(index, "nationality")) || "",
+              ).trim(),
+              passportNumber: String(
+                form.get(fieldName(index, "passportNumber")) || "",
+              ).trim(),
+              passportCountry: String(
+                form.get(fieldName(index, "passportCountry")) || "",
+              ).trim(),
+              passportExpiry: String(
+                form.get(fieldName(index, "passportExpiry")) || "",
+              ).trim(),
+            };
+
+            if (index === 0) return leadPassenger;
+            return {
+              ...leadPassenger,
+              ...passenger,
+              firstName: passenger.firstName || leadPassenger.firstName,
+              lastName: passenger.lastName || leadPassenger.lastName,
+              email: passenger.email || leadPassenger.email,
+              phone: passenger.phone || leadPassenger.phone,
+              title: passenger.title || leadPassenger.title,
+              gender: passenger.gender || leadPassenger.gender,
+              dateOfBirth: passenger.dateOfBirth || leadPassenger.dateOfBirth,
+              nationality: passenger.nationality || leadPassenger.nationality,
+              passportNumber: passenger.passportNumber || leadPassenger.passportNumber,
+              passportCountry:
+                passenger.passportCountry || leadPassenger.passportCountry,
+              passportExpiry:
+                passenger.passportExpiry || leadPassenger.passportExpiry,
+            };
+          });
+
+          const isPassengerComplete = (passenger: {
+            firstName: string;
+            lastName: string;
+            email: string;
+            phone: string;
+            title: string;
+            gender: string;
+            dateOfBirth: string;
+            nationality: string;
+            passportNumber: string;
+            passportCountry: string;
+            passportExpiry: string;
+          }) =>
+            passenger.firstName &&
+            passenger.lastName &&
+            passenger.email &&
+            passenger.phone &&
+            passenger.dateOfBirth &&
+            passenger.nationality &&
+            passenger.passportNumber &&
+            passenger.passportCountry &&
+            passenger.passportExpiry;
+
+          if (passengers.some((passenger) => !isPassengerComplete(passenger))) {
+            setError("Please complete every traveller's details.");
+            return;
+          }
+
           try {
-            const amountValue = Number.parseFloat(
+            const unitAmount = Number.parseFloat(
               offer.price.replace(/[^\d.]/g, ""),
             );
+            const totalAmount = unitAmount * passengerCount;
             const paymentResponse = await fetch(
               `${apiBaseUrl}/api/payments/checkout`,
               {
@@ -4957,10 +5042,10 @@ function BookingPage() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                   offerId: offer.id,
-                  ...passenger,
-                  amount: amountValue.toFixed(2).toString(),
+                  ...passengers[0],
+                  amount: totalAmount.toFixed(2).toString(),
                   currency: offer.currency || "EUR",
-                  passengers: [passenger],
+                  passengers,
                   search,
                   successUrl: `${window.location.origin}/my-trips?payment=success`,
                   cancelUrl: `${window.location.origin}/book/${params?.id}?payment=cancelled`,
@@ -4980,7 +5065,11 @@ function BookingPage() {
               );
             }
 
-            setBookingId(paymentResult.checkoutUrl.includes("session_id=") ? "checkout" : "checkout");
+            setBookingId(
+              paymentResult.checkoutUrl.includes("session_id=")
+                ? "checkout"
+                : "checkout",
+            );
             setSubmitted(true);
             window.location.assign(paymentResult.checkoutUrl);
           } catch (submissionError) {
@@ -4993,120 +5082,127 @@ function BookingPage() {
         }}
         className="grid gap-8 lg:grid-cols-[1fr_.75fr]"
       >
-        <div className="rounded-[28px] border border-[#d7cdbb] bg-white p-8 shadow-sm">
-          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#c75a3b]">
-            Lead traveller
-          </p>
-          <div className="mt-6 grid gap-5 md:grid-cols-2">
-            <label className="text-sm font-medium text-[#173846]">
-              Title
-              <select
-                required
-                name="title"
-                defaultValue="Mr"
-                className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
-              >
-                <option value="Mr">Mr</option>
-                <option value="Ms">Ms</option>
-                <option value="Mrs">Mrs</option>
-                <option value="Miss">Miss</option>
-                <option value="Dr">Dr</option>
-              </select>
-            </label>
-            <label className="text-sm font-medium text-[#173846]">
-              Gender
-              <select
-                required
-                name="gender"
-                defaultValue="Male"
-                className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
-              >
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </select>
-            </label>
-            <label className="text-sm font-medium text-[#173846]">
-              First name
-              <input
-                required
-                name="firstName"
-                className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
-              />
-            </label>
-            <label className="text-sm font-medium text-[#173846]">
-              Last name
-              <input
-                required
-                name="lastName"
-                className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
-              />
-            </label>
-            <label className="text-sm font-medium text-[#173846] md:col-span-2">
-              Date of birth
-              <input
-                required
-                name="dateOfBirth"
-                type="date"
-                className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
-              />
-            </label>
-            <label className="text-sm font-medium text-[#173846] md:col-span-2">
-              Nationality
-              <input
-                required
-                name="nationality"
-                className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
-                placeholder="e.g. Dutch"
-              />
-            </label>
-            <label className="text-sm font-medium text-[#173846] md:col-span-2">
-              Passport number
-              <input
-                required
-                name="passportNumber"
-                className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
-                placeholder="P1234567"
-              />
-            </label>
-            <label className="text-sm font-medium text-[#173846] md:col-span-2">
-              Passport country
-              <input
-                required
-                name="passportCountry"
-                className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
-                placeholder="e.g. Netherlands"
-              />
-            </label>
-            <label className="text-sm font-medium text-[#173846] md:col-span-2">
-              Passport expiry date
-              <input
-                required
-                name="passportExpiry"
-                type="date"
-                className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
-              />
-            </label>
-            <label className="text-sm font-medium text-[#173846] md:col-span-2">
-              Email
-              <input
-                required
-                name="email"
-                type="email"
-                className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
-                placeholder="you@example.com"
-              />
-            </label>
-            <label className="text-sm font-medium text-[#173846] md:col-span-2">
-              Phone
-              <input
-                required
-                name="phone"
-                type="tel"
-                className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
-                placeholder="+31 ..."
-              />
-            </label>
-          </div>
+        <div className="space-y-8 rounded-[28px] border border-[#d7cdbb] bg-white p-8 shadow-sm">
+          {Array.from({ length: passengerCount }, (_, index) => {
+            const label = index === 0 ? "Lead traveller" : `Traveller ${index + 1}`;
+            return (
+              <div key={label}>
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#c75a3b]">
+                  {label}
+                </p>
+                <div className="mt-6 grid gap-5 md:grid-cols-2">
+                  <label className="text-sm font-medium text-[#173846]">
+                    Title
+                    <select
+                      required
+                      name={fieldName(index, "title")}
+                      defaultValue="Mr"
+                      className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
+                    >
+                      <option value="Mr">Mr</option>
+                      <option value="Ms">Ms</option>
+                      <option value="Mrs">Mrs</option>
+                      <option value="Miss">Miss</option>
+                      <option value="Dr">Dr</option>
+                    </select>
+                  </label>
+                  <label className="text-sm font-medium text-[#173846]">
+                    Gender
+                    <select
+                      required
+                      name={fieldName(index, "gender")}
+                      defaultValue="Male"
+                      className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
+                    >
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                  </label>
+                  <label className="text-sm font-medium text-[#173846]">
+                    First name
+                    <input
+                      required
+                      name={fieldName(index, "firstName")}
+                      className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
+                    />
+                  </label>
+                  <label className="text-sm font-medium text-[#173846]">
+                    Last name
+                    <input
+                      required
+                      name={fieldName(index, "lastName")}
+                      className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
+                    />
+                  </label>
+                  <label className="text-sm font-medium text-[#173846] md:col-span-2">
+                    Date of birth
+                    <input
+                      required
+                      name={fieldName(index, "dateOfBirth")}
+                      type="date"
+                      className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
+                    />
+                  </label>
+                  <label className="text-sm font-medium text-[#173846] md:col-span-2">
+                    Nationality
+                    <input
+                      required
+                      name={fieldName(index, "nationality")}
+                      className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
+                      placeholder="e.g. Dutch"
+                    />
+                  </label>
+                  <label className="text-sm font-medium text-[#173846] md:col-span-2">
+                    Passport number
+                    <input
+                      required
+                      name={fieldName(index, "passportNumber")}
+                      className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
+                      placeholder="P1234567"
+                    />
+                  </label>
+                  <label className="text-sm font-medium text-[#173846] md:col-span-2">
+                    Passport country
+                    <input
+                      required
+                      name={fieldName(index, "passportCountry")}
+                      className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
+                      placeholder="e.g. Netherlands"
+                    />
+                  </label>
+                  <label className="text-sm font-medium text-[#173846] md:col-span-2">
+                    Passport expiry date
+                    <input
+                      required
+                      name={fieldName(index, "passportExpiry")}
+                      type="date"
+                      className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
+                    />
+                  </label>
+                  <label className="text-sm font-medium text-[#173846] md:col-span-2">
+                    Email
+                    <input
+                      required
+                      name={fieldName(index, "email")}
+                      type="email"
+                      className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
+                      placeholder="you@example.com"
+                    />
+                  </label>
+                  <label className="text-sm font-medium text-[#173846] md:col-span-2">
+                    Phone
+                    <input
+                      required
+                      name={fieldName(index, "phone")}
+                      type="tel"
+                      className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
+                      placeholder="+31 ..."
+                    />
+                  </label>
+                </div>
+              </div>
+            );
+          })}
           {error && (
             <p
               role="alert"
