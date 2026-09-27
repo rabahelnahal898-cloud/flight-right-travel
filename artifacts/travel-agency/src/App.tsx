@@ -103,6 +103,7 @@ const translations: Record<"ar" | "nl", Record<string, string>> = {
     "Request a plan": "اطلب خطة",
     "Request this service": "اطلب هذه الخدمة",
     "Start planning": "ابدأ التخطيط",
+    "Learn more": "اعرف المزيد",
     "Become a partner": "كن شريكًا",
     "Submit partner request": "إرسال طلب الشراكة",
     "Check availability": "تحقق من التوفر",
@@ -249,6 +250,7 @@ const translations: Record<"ar" | "nl", Record<string, string>> = {
     "Request a plan": "Vraag een plan aan",
     "Request this service": "Deze dienst aanvragen",
     "Start planning": "Start met plannen",
+    "Learn more": "Meer informatie",
     "Become a partner": "Word partner",
     "Submit partner request": "Partneraanvraag versturen",
     "Check availability": "Beschikbaarheid controleren",
@@ -3557,7 +3559,7 @@ function Home() {
                     {service.text}
                   </p>
                   <div className="mt-4 flex items-center gap-2 text-sm font-semibold text-[#c75a3b]">
-                    Learn more <ArrowRight className="h-4 w-4" />
+                    {t("Learn more")} <ArrowRight className="h-4 w-4" />
                   </div>
                 </button>
               );
@@ -3794,7 +3796,7 @@ function Home() {
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
                       type="email"
-                      placeholder="Your email address"
+                      placeholder={t("Your email address")}
                       className="w-full bg-transparent text-sm outline-none placeholder:text-[#617277]"
                     />
                   </label>
@@ -4325,7 +4327,7 @@ function ContactPage() {
                   name="name"
                   required
                   className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
-                  placeholder="Your name"
+                  placeholder={t("Your name")}
                 />
               </label>
               <label className="text-sm font-medium text-[#173846]">
@@ -4346,7 +4348,7 @@ function ContactPage() {
                 defaultValue={subjectFromUrl}
                 required
                 className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
-                placeholder="How can we help?"
+                placeholder={t("How can we help?")}
               />
             </label>
             <label className="block text-sm font-medium text-[#173846]">
@@ -4356,7 +4358,7 @@ function ContactPage() {
                 required
                 rows={5}
                 className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
-                placeholder="Tell us about your trip or enquiry"
+                placeholder={t("Tell us about your trip or enquiry")}
               />
             </label>
             {error && (
@@ -4447,8 +4449,8 @@ function FlightsPage() {
               onChange={(event) => setSort(event.target.value)}
               className="ml-3 rounded-full border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-2 text-sm outline-none"
             >
-              <option value="recommended">Recommended</option>
-              <option value="price">Lowest price</option>
+              <option value="recommended">{t("Recommended")}</option>
+              <option value="price">{t("Lowest price")}</option>
             </select>
           </label>
         </div>
@@ -5251,7 +5253,7 @@ function BookingPage() {
             {search.passengers === 1 ? "" : "s"}
           </p>
           <div className="mt-8 border-t border-[#f7edcf]/20 pt-5">
-            <span className="text-sm text-[#f7edcf]/70">Estimated total</span>
+            <span className="text-sm text-[#f7edcf]/70">{t("Estimated total")}</span>
             <strong className="mt-2 block font-mono-custom text-3xl">
               {offer.currency === "EUR" || !offer.currency
                 ? "€"
@@ -5748,7 +5750,7 @@ function ServiceCheckoutPage() {
                 name="details"
                 rows={4}
                 className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
-                placeholder="Tell us your dates, destination, number of travellers and preferences"
+                placeholder={t("Tell us your dates, destination, number of travellers and preferences")}
               />
             </label>
           </div>
@@ -5934,7 +5936,7 @@ function PartnerApplicationPage() {
                 required
                 name="business"
                 className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
-                placeholder="Your business"
+                placeholder={t("Your business")}
               />
             </label>
             <label className="text-sm font-medium text-[#173846]">
@@ -5954,12 +5956,12 @@ function PartnerApplicationPage() {
                 name="type"
                 className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
               >
-                <option value="">Choose one</option>
-                <option>Accommodation</option>
-                <option>Guided experiences</option>
-                <option>Tours</option>
-                <option>Transfers</option>
-                <option>Other travel service</option>
+                <option value="">{t("Choose one")}</option>
+                <option>{t("Accommodation")}</option>
+                <option>{t("Guided experiences")}</option>
+                <option>{t("Tours")}</option>
+                <option>{t("Transfers")}</option>
+                <option>{t("Other travel service")}</option>
               </select>
             </label>
             <label className="text-sm font-medium text-[#173846]">
@@ -5968,7 +5970,7 @@ function PartnerApplicationPage() {
                 required
                 name="location"
                 className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
-                placeholder="City and country"
+                placeholder={t("City and country")}
               />
             </label>
             <label className="text-sm font-medium text-[#173846] md:col-span-2">
@@ -5978,7 +5980,7 @@ function PartnerApplicationPage() {
                 name="details"
                 rows={5}
                 className="mt-2 w-full rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 outline-none"
-                placeholder="Describe your service, capacity, typical price and preferred travellers"
+                placeholder={t("Describe your service, capacity, typical price and preferred travellers")}
               />
             </label>
           </div>
@@ -6170,14 +6172,14 @@ function MyTripsPage() {
           <input
             required
             name="reference"
-            placeholder="Booking reference"
+            placeholder={t("Booking reference")}
             className="rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 text-sm outline-none"
           />
           <input
             required
             name="email"
             type="email"
-            placeholder="Booking email"
+            placeholder={t("Booking email")}
             className="rounded-2xl border border-[#d7cdbb] bg-[#f7f0e4] px-4 py-3 text-sm outline-none"
           />
           <button
