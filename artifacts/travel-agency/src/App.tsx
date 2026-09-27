@@ -3530,22 +3530,38 @@ function Home() {
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-5">
-            {serviceHighlights.map((service) => (
-              <div
-                key={service.title}
-                className="rounded-[24px] border border-[#d7cdbb] bg-white p-5 shadow-sm"
-              >
-                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#c75a3b]">
-                  Service
-                </p>
-                <h3 className="mt-4 font-display text-3xl leading-none tracking-[-0.04em] text-[#173846]">
-                  {service.title}
-                </h3>
-                <p className="mt-4 text-sm leading-6 text-[#617277]">
-                  {service.text}
-                </p>
-              </div>
-            ))}
+            {serviceHighlights.map((service) => {
+              // Map service titles to their URLs
+              const serviceLinks: Record<string, string> = {
+                "Group travel abroad": "/services/group-trips",
+                "Visa assistance": "/services/visa",
+                "Private trips & honeymoon packages": "/services/honeymoon",
+                "Discover Egypt": "/services/egypt",
+                "B2B services": "/services/b2b"
+              };
+              
+              return (
+                <button
+                  key={service.title}
+                  type="button"
+                  onClick={() => setLocation(serviceLinks[service.title] || "#")}
+                  className="rounded-[24px] border border-[#d7cdbb] bg-white p-5 shadow-sm text-left transition-transform hover:-translate-y-1 hover:shadow-md cursor-pointer"
+                >
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#c75a3b]">
+                    Service
+                  </p>
+                  <h3 className="mt-4 font-display text-3xl leading-none tracking-[-0.04em] text-[#173846]">
+                    {service.title}
+                  </h3>
+                  <p className="mt-4 text-sm leading-6 text-[#617277]">
+                    {service.text}
+                  </p>
+                  <div className="mt-4 flex items-center gap-2 text-sm font-semibold text-[#c75a3b]">
+                    Learn more <ArrowRight className="h-4 w-4" />
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </section>
 
