@@ -57,7 +57,7 @@ const brandProfile = {
   name: "Flight Right Travel & Tourism",
   tagline: "Thoughtful travel, memorable flights",
   description:
-    "Flight Right helps travelers compare and arrange flights between Europe, Egypt and Türkiye, with visa guidance, private trip planning and hands-on support when your journey needs a human touch.",
+    "Flight Right helps travelers arrange flights, visas, and curated trips to destinations worldwide, with personal support at every step.",
 };
 
 type Language = "en" | "ar" | "nl";
@@ -73,8 +73,8 @@ const translations: Record<"ar" | "nl", Record<string, string>> = {
     "Flight Right": "فلايت رايت",
     "Flight Right Travel & Tourism": "فلايت رايت للسفر والسياحة",
     "Thoughtful travel, memorable flights": "سفر مدروس ورحلات لا تُنسى",
-    "Flight Right helps travelers compare and arrange flights between Europe, Egypt and Türkiye, with visa guidance, private trip planning and hands-on support when your journey needs a human touch.":
-      "تساعد فلايت رايت المسافرين على مقارنة وترتيب الرحلات بين أوروبا ومصر وتركيا، مع إرشادات التأشيرات وتخطيط الرحلات الخاصة ودعم شخصي عند الحاجة.",
+    "Flight Right helps travelers arrange flights, visas, and curated trips to destinations worldwide, with personal support at every step.":
+      "تساعد فلايت رايت المسافرين في ترتيب الرحلات والتأشيرات والبرامج السياحية إلى وجهات عالمية، مع دعم شخصي في كل خطوة.",
     Flights: "الرحلات الجوية",
     Destinations: "الوجهات",
     Contact: "تواصل معنا",
@@ -226,8 +226,8 @@ const translations: Record<"ar" | "nl", Record<string, string>> = {
     "Flight Right Travel & Tourism": "Flight Right Reizen & Toerisme",
     "Thoughtful travel, memorable flights":
       "Doordachte reizen en memorabele vluchten",
-    "Flight Right helps travelers compare and arrange flights between Europe, Egypt and Türkiye, with visa guidance, private trip planning and hands-on support when your journey needs a human touch.":
-      "Flight Right helpt reizigers vluchten tussen Europa, Egypte en Türkiye vergelijken en regelen, met visumbegeleiding, privéreizen en persoonlijke ondersteuning.",
+    "Flight Right helps travelers arrange flights, visas, and curated trips to destinations worldwide, with personal support at every step.":
+      "Flight Right helpt reizigers wereldwijd met vluchten, visa en zorgvuldig samengestelde reizen, met persoonlijke ondersteuning bij elke stap.",
     Flights: "Vluchten",
     Destinations: "Bestemmingen",
     Contact: "Contact",
@@ -391,6 +391,10 @@ Object.assign(translations.ar, {
   "B2B services": "خدمات الشركات",
   "Supporting travel agents, corporate planners and partner networks with reliable route guidance, coordination and service standards.":
     "دعم وكلاء السفر ومنظمي رحلات الشركات وشبكات الشركاء بإرشادات موثوقة للمسارات وتنسيق احترافي ومعايير خدمة واضحة.",
+  "Airlines and route partners we've vetted across multiple global destinations.":
+    "شركات الطيران وشركاء المسارات الموثوقين في وجهات عالمية متعددة.",
+  "We can combine Amsterdam with onward routes across multiple destinations worldwide.":
+    "يمكننا جمع أمستردام مع مسارات متابعة عبر وجهات متعددة حول العالم.",
 });
 
 Object.assign(translations.nl, {
@@ -406,6 +410,10 @@ Object.assign(translations.nl, {
   "B2B services": "B2B-diensten",
   "Supporting travel agents, corporate planners and partner networks with reliable route guidance, coordination and service standards.":
     "Ondersteuning voor reisagenten, zakelijke planners en partners met betrouwbare routebegeleiding, coördinatie en duidelijke servicenormen.",
+  "Airlines and route partners we've vetted across multiple global destinations.":
+    "Luchtvaartmaatschappijen en routepartners die we hebben geverifieerd voor meerdere wereldwijde bestemmingen.",
+  "We can combine Amsterdam with onward routes across multiple destinations worldwide.":
+    "We kunnen Amsterdam combineren met vervolgtrajecten naar meerdere bestemmingen wereldwijd.",
 });
 
 Object.assign(translations.ar, {
@@ -584,8 +592,8 @@ Object.assign(translations.ar, {
   "Travel experts highlight calmer, more curated holiday planning for families.": "يؤكد خبراء السفر على تخطيط العطل الأكثر هدوءًا واهتمامًا للعائلات.",
   "Flight Right launches boutique route packages from Amsterdam and beyond.": "تطلق فلايت رايت باقات رحلات أنيقة من أمستردام وما وراءها.",
   "Your journey, our passion.": "رحلتك، شغفنا.",
-  "Flight Right is a travel agency built around care, route clarity and practical advice for travelers moving between Europe, Egypt and Türkiye.":
-    "فلايت رايت وكالة سفر تعتمد على الرعاية ووضوح المسارات والنصيحة العملية للمسافرين بين أوروبا ومصر وتركيا.",
+  "Flight Right is a travel agency built around care, route clarity and practical advice for travelers exploring destinations worldwide.":
+    "فلايت رايت وكالة سفر تعتمد على الرعاية ووضوح المسارات والنصيحة العملية للمسافرين الذين يستكشفون وجهات عالمية.",
   "We are building a team that combines hospitality, planning and practical problem-solving. If you care about detail, service and better travel experiences, you may be a fit.":
     "نحن نبني فريقًا يجمع بين الضيافة والتخطيط وحل المشكلات العملية. إذا كنت تهتم بالتفاصيل والخدمة وتجارب السفر الأفضل، فقد تكون مناسبًا.",
   "Senior Travel Consultant": "مستشار سفر كبير",
@@ -793,8 +801,8 @@ Object.assign(translations.nl, {
   "Travel experts highlight calmer, more curated holiday planning for families.": "Reisexperts benadrukken rustiger en meer op maat gemaakt vakantieplanning voor gezinnen.",
   "Flight Right launches boutique route packages from Amsterdam and beyond.": "Flight Right lanceert boutique routepakketten vanuit Amsterdam en verder.",
   "Your journey, our passion.": "Jouw reis, onze passie.",
-  "Flight Right is a travel agency built around care, route clarity and practical advice for travelers moving between Europe, Egypt and Türkiye.":
-    "Flight Right is een reisbureau dat draait om zorg, duidelijke routes en praktische begeleiding voor reizigers tussen Europa, Egypte en Turkije.",
+  "Flight Right is a travel agency built around care, route clarity and practical advice for travelers exploring destinations worldwide.":
+    "Flight Right is een reisbureau dat draait om zorg, duidelijke routes en praktische begeleiding voor reizigers die wereldwijd bestemmingen verkennen.",
   "We are building a team that combines hospitality, planning and practical problem-solving. If you care about detail, service and better travel experiences, you may be a fit.":
     "Wij bouwen aan een team dat gastvrijheid, planning en praktisch probleemoplossend vermogen combineert. Als u om details, service en betere reizen geeft, past u misschien bij ons.",
   "Senior Travel Consultant": "Senior reisconsulent",
@@ -975,8 +983,8 @@ Object.assign(translations.ar, {
     "احجز منطقة الإقامة حول المتاحف أو الاجتماعات أو الأحياء التي تهمك.",
   "Use public transport and walking time as part of the experience, not just a transfer between stops.":
     "استخدم المواصلات العامة ووقت المشي كجزء من التجربة لا كتنقل بين المحطات فقط.",
-  "We can combine Amsterdam with onward routes across Europe, Egypt or Türkiye.":
-    "يمكننا جمع أمستردام مع مسارات متابعة عبر أوروبا أو مصر أو تركيا.",
+  "We can combine Amsterdam with onward routes across multiple destinations worldwide.":
+    "يمكننا جمع أمستردام مع مسارات متابعة عبر وجهات متعددة حول العالم.",
 });
 
 Object.assign(translations.ar, {
@@ -1941,8 +1949,8 @@ Object.assign(translations.ar, {
   Careers: "الوظائف",
   Press: "الإعلام",
   Contact: "تواصل معنا",
-  "فلايت رايت is a travel agency built around care, route clarity and practical advice for travelers moving between Europe, Egypt and Türkiye.":
-    "فلايت رايت وكالة سفر تقوم على الاهتمام ووضوح المسارات والنصائح العملية للمسافرين بين أوروبا ومصر وتركيا.",
+  "فلايت رايت is a travel agency built around care, route clarity and practical advice for travelers exploring destinations worldwide.":
+    "فلايت رايت وكالة سفر تقوم على الاهتمام ووضوح المسارات والنصائح العملية للمسافرين الذين يستكشفون وجهات عالمية.",
   "فلايت رايت started with a simple challenge: comparing international flights was fragmented, slow and overwhelming. We built a service that brings route discovery, fare comparison and human support into one clear plan.":
     "بدأت فلايت رايت من تحدٍ بسيط: كانت مقارنة الرحلات الدولية مجزأة وبطيئة ومربكة. لذلك بنينا خدمة تجمع اكتشاف المسارات ومقارنة الأسعار والدعم البشري في خطة واضحة واحدة.",
   "Today we help families, couples and business travelers discover routes that fit their pace, their budget and their sense of what a good trip should feel like.":
@@ -2040,8 +2048,8 @@ Object.assign(translations.ar, {
   "Travel planning together": "تخطيط السفر معًا",
   "Pair your visa support request with flight planning, accommodation and a clear trip outline.":
     "اجمع طلب دعم التأشيرة مع تخطيط الرحلات والإقامة ومخطط واضح للرحلة.",
-  "We partner with travel agents, corporate planners and destination specialists to deliver dependable flight options, route support and consistent service standards across Europe, Egypt and Türkiye.":
-    "نتعاون مع وكلاء السفر ومنظمي رحلات الشركات ومتخصصي الوجهات لتقديم خيارات رحلات موثوقة ودعم للمسارات ومعايير خدمة ثابتة في أوروبا ومصر وتركيا.",
+  "We partner with travel agents, corporate planners and destination specialists to deliver dependable flight options, route support and consistent service standards worldwide.":
+    "نتعاون مع وكلاء السفر ومنظمي رحلات الشركات ومتخصصي الوجهات لتقديم خيارات رحلات موثوقة ودعم للمسارات ومعايير خدمة ثابتة عالميًا.",
   "Flight search support for corporate partners":
     "دعم البحث عن الرحلات لشركاء الشركات",
   "Flexible pricing and allocation on selected routes":
@@ -2072,8 +2080,8 @@ Object.assign(translations.ar, {
 });
 
 Object.assign(translations.ar, {
-  "Flight Right is a travel agency built around care, route clarity and practical advice for travelers moving between Europe, Egypt and Türkiye.":
-    "فلايت رايت وكالة سفر تقوم على الاهتمام ووضوح المسارات والنصائح العملية للمسافرين بين أوروبا ومصر وتركيا.",
+  "Flight Right is a travel agency built around care, route clarity and practical advice for travelers exploring destinations worldwide.":
+    "فلايت رايت وكالة سفر تقوم على الاهتمام ووضوح المسارات والنصائح العملية للمسافرين الذين يستكشفون وجهات عالمية.",
   "Flight Right started with a simple challenge: comparing international flights was fragmented, slow and overwhelming. We built a service that brings route discovery, fare comparison and human support into one clear plan.":
     "بدأت فلايت رايت من تحدٍ بسيط: كانت مقارنة الرحلات الدولية مجزأة وبطيئة ومربكة. لذلك بنينا خدمة تجمع اكتشاف المسارات ومقارنة الأسعار والدعم البشري في خطة واضحة واحدة.",
   "We are building a team that combines hospitality, planning and practical problem-solving. If you care about detail, service and better travel experiences, you may be a fit.":
@@ -2145,8 +2153,8 @@ Object.assign(translations.nl, {
   "Email:": "E-mail:",
   "Phone:": "Telefoon:",
   "Office:": "Kantoor:",
-  "Flight Right is a travel agency built around care, route clarity and practical advice for travelers moving between Europe, Egypt and Türkiye.":
-    "Flight Right is een reisbureau rond aandacht, duidelijke routes en praktisch advies voor reizigers tussen Europa, Egypte en Türkiye.",
+  "Flight Right is a travel agency built around care, route clarity and practical advice for travelers exploring destinations worldwide.":
+    "Flight Right is een reisbureau rond aandacht, duidelijke routes en praktisch advies voor reizigers die wereldwijd bestemmingen verkennen.",
   "Flight Right started with a simple challenge: comparing international flights was fragmented, slow and overwhelming. We built a service that brings route discovery, fare comparison and human support into one clear plan.":
     "Flight Right begon met een eenvoudige uitdaging: internationale vluchten vergelijken was versnipperd, traag en overweldigend. Daarom brachten we routeontdekking, tariefvergelijking en persoonlijke ondersteuning samen in één duidelijk plan.",
   "Your business": "Jouw bedrijf",
@@ -2900,7 +2908,7 @@ const destinationDetails: Record<
     planningNotes: [
       "Book the accommodation area around your main museums, meetings or neighbourhood interests.",
       "Use public transport and walking time as part of the experience, not just a transfer between stops.",
-      "We can combine Amsterdam with onward routes across Europe, Egypt or Türkiye.",
+      "We can combine Amsterdam with onward routes across multiple destinations worldwide.",
     ],
   },
 };
@@ -3153,7 +3161,7 @@ const reasons = [
   {
     icon: "🤝",
     title: "Trusted travel partners",
-    text: "Airlines and route partners we've vetted across Europe, Egypt and Türkiye.",
+    text: "Airlines and route partners we've vetted across multiple global destinations.",
   },
   {
     icon: "💶",
@@ -4092,7 +4100,7 @@ function AboutPage() {
   return (
     <PageFrame
       title="About us"
-      intro="Flight Right is a travel agency built around care, route clarity and practical advice for travelers moving between Europe, Egypt and Türkiye."
+      intro="Flight Right is a travel agency built around care, route clarity and practical advice for travelers exploring destinations worldwide."
     >
       <div className="grid gap-6 md:grid-cols-4">
         {stats.map((item) => (
@@ -6114,7 +6122,7 @@ function B2BPage() {
   return (
     <PageFrame
       title="B2B"
-      intro="We partner with travel agents, corporate planners and destination specialists to deliver dependable flight options, route support and consistent service standards across Europe, Egypt and Türkiye."
+      intro="We partner with travel agents, corporate planners and destination specialists to deliver dependable flight options, route support and consistent service standards worldwide."
     >
       <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="rounded-[28px] border border-[#d7cdbb] bg-white p-8 shadow-sm">
