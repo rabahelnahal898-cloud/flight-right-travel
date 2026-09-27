@@ -104,6 +104,12 @@ const translations: Record<"ar" | "nl", Record<string, string>> = {
     "Request this service": "اطلب هذه الخدمة",
     "Start planning": "ابدأ التخطيط",
     "Learn more": "اعرف المزيد",
+    "Registered Company": "شركة مسجلة",
+    "KVK Number": "رقم KVK",
+    "Registered at": "مسجلة في",
+    "Dutch Chamber of Commerce": "غرفة التجارة الهولندية",
+    "Trade Name": "الاسم التجاري",
+    "Since": "منذ",
     "Become a partner": "كن شريكًا",
     "Submit partner request": "إرسال طلب الشراكة",
     "Check availability": "تحقق من التوفر",
@@ -251,6 +257,12 @@ const translations: Record<"ar" | "nl", Record<string, string>> = {
     "Request this service": "Deze dienst aanvragen",
     "Start planning": "Start met plannen",
     "Learn more": "Meer informatie",
+    "Registered Company": "Geregistreerd bedrijf",
+    "KVK Number": "KVK-nummer",
+    "Registered at": "Geregistreerd bij",
+    "Dutch Chamber of Commerce": "Kamer van Koophandel",
+    "Trade Name": "Handelsnaam",
+    "Since": "Sinds",
     "Become a partner": "Word partner",
     "Submit partner request": "Partneraanvraag versturen",
     "Check availability": "Beschikbaarheid controleren",
@@ -3965,9 +3977,38 @@ function Home() {
             </div>
           </div>
 
-          <div className="mt-10 flex flex-col gap-3 border-t border-[#d7cdbb] pt-6 text-[11px] font-medium uppercase tracking-[0.14em] text-[#617277] md:flex-row md:items-center md:justify-between">
-            <p>© 2026 {brandProfile.name}. All rights reserved.</p>
-            <p>Flight Right Travel & Tourism • {businessAddress}</p>
+          <div className="mt-10 border-t border-[#d7cdbb] pt-6">
+            {/* KVK Registration Badge */}
+            <div className="mb-6 flex flex-wrap items-center justify-center gap-6 rounded-2xl bg-white/80 backdrop-blur-sm border border-[#d7cdbb] p-6">
+              <div className="flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#173846]">
+                  <Check className="h-6 w-6 text-[#f6c94b]" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#c75a3b]">
+                    Registered Company
+                  </p>
+                  <p className="text-sm font-semibold text-[#173846]">
+                    Dutch Chamber of Commerce
+                  </p>
+                </div>
+              </div>
+              <div className="h-8 w-px bg-[#d7cdbb]" />
+              <div>
+                <p className="text-xs font-medium text-[#617277]">KVK Number</p>
+                <p className="text-lg font-bold text-[#173846]">42170831</p>
+              </div>
+              <div className="h-8 w-px bg-[#d7cdbb]" />
+              <div>
+                <p className="text-xs font-medium text-[#617277]">Trade Name</p>
+                <p className="text-sm font-semibold text-[#173846]">Flightright Travel</p>
+              </div>
+            </div>
+            
+            <div className="flex flex-col gap-3 text-[11px] font-medium uppercase tracking-[0.14em] text-[#617277] md:flex-row md:items-center md:justify-between">
+              <p>© 2026 {brandProfile.name}. All rights reserved.</p>
+              <p>Flight Right Travel & Tourism • {businessAddress}</p>
+            </div>
           </div>
         </div>
       </footer>
@@ -4086,6 +4127,41 @@ function AboutPage() {
             routes that fit their pace, their budget and their sense of what a
             good trip should feel like.
           </p>
+          
+          {/* KVK Registration */}
+          <div className="mt-8 rounded-2xl bg-[#f7f0e4] p-6 border border-[#d7cdbb]">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#173846]">
+                <Check className="h-5 w-5 text-[#f6c94b]" />
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#c75a3b]">
+                  Registered Company
+                </p>
+                <p className="text-sm font-semibold text-[#173846]">
+                  Dutch Chamber of Commerce
+                </p>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <p className="text-xs font-medium text-[#617277]">KVK Number</p>
+                <p className="font-bold text-[#173846]">42170831</p>
+              </div>
+              <div>
+                <p className="text-xs font-medium text-[#617277]">Trade Name</p>
+                <p className="font-semibold text-[#173846]">Flightright Travel</p>
+              </div>
+              <div>
+                <p className="text-xs font-medium text-[#617277]">Registered at</p>
+                <p className="font-semibold text-[#173846]">Lindelaan 8, 1775EJ Middenmeer</p>
+              </div>
+              <div>
+                <p className="text-xs font-medium text-[#617277]">Since</p>
+                <p className="font-semibold text-[#173846]">September 2023</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="rounded-[28px] bg-[#f0e6d6] p-8 shadow-sm">
@@ -6053,6 +6129,33 @@ function B2BPage() {
               </li>
             ))}
           </ul>
+          
+          {/* KVK Registration */}
+          <div className="mt-8 rounded-2xl bg-[#f7f0e4] p-6 border border-[#d7cdbb]">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#173846]">
+                <Check className="h-5 w-5 text-[#f6c94b]" />
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#c75a3b]">
+                  Registered Company
+                </p>
+                <p className="text-sm font-semibold text-[#173846]">
+                  Dutch Chamber of Commerce
+                </p>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <p className="text-xs font-medium text-[#617277]">KVK Number</p>
+                <p className="font-bold text-[#173846]">42170831</p>
+              </div>
+              <div>
+                <p className="text-xs font-medium text-[#617277]">Trade Name</p>
+                <p className="font-semibold text-[#173846]">Flightright Travel</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="rounded-[28px] bg-[#173846] p-8 text-[#f7edcf] shadow-sm">
